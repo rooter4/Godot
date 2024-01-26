@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c4v7jqko7dxgk"]
 
-[ext_resource type="Texture2D" uid="uid://cwsdw5qgbkv2l" path="res://Assets/Main Characters/Mask Dude/Fall (32x32).png" id="1_x4xaf"]
+[ext_resource type="Texture2D" uid="uid://cejgmbnueqerb" path="res://Assets/20 Enemies.png" id="1_4cmh4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ppx1g"]
 size = Vector2(37, 48)
@@ -10,9 +10,11 @@ size = Vector2(37, 48)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(11.5, 11.5)
-scale = Vector2(1.71875, 1.71875)
-texture = ExtResource("1_x4xaf")
+texture = ExtResource("1_4cmh4")
 flip_h = true
+hframes = 10
+vframes = 10
+frame = 15
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(12.5, 14)

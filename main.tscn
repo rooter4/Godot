@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxk1p8s6p5mlw"]
+[gd_scene load_steps=8 format=3 uid="uid://bxk1p8s6p5mlw"]
 
 [ext_resource type="Texture2D" uid="uid://c8h8kai4u3qu0" path="res://Assets/Background/Green.png" id="1_lug7t"]
 [ext_resource type="Texture2D" uid="uid://clh0wa74fhnb6" path="res://Assets/Terrain/Terrain (16x16).png" id="2_ikgrp"]
 [ext_resource type="PackedScene" uid="uid://crrxc8i2tldfx" path="res://Scenes/main_character.tscn" id="3_gkovs"]
 [ext_resource type="Script" path="res://Scenes/main_character.gd" id="4_euq0c"]
-[ext_resource type="PackedScene" uid="uid://c4v7jqko7dxgk" path="res://Scenes/enemy.tscn" id="4_h8och"]
 [ext_resource type="PackedScene" uid="uid://c6yf5vqr2hesj" path="res://Scenes/cherry.tscn" id="6_uykyc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bg4d1"]
@@ -513,15 +512,6 @@ layer_0/tile_data = PackedInt32Array(720896, 393216, 0, 720897, 458752, 0, 72089
 [node name="main_character" parent="." instance=ExtResource("3_gkovs")]
 position = Vector2(152, 462)
 script = ExtResource("4_euq0c")
-
-[node name="Camera2D" type="Camera2D" parent="main_character"]
-position = Vector2(0.333332, 4)
-scale = Vector2(0.333333, 0.333333)
-position_smoothing_enabled = true
-position_smoothing_speed = 10.0
-
-[node name="Enemy" parent="." instance=ExtResource("4_h8och")]
-position = Vector2(1086, 335)
 
 [node name="cherry" parent="." instance=ExtResource("6_uykyc")]
 position = Vector2(783, 348)
