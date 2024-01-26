@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c8h8kai4u3qu0" path="res://Assets/Background/Green.png" id="1_lug7t"]
 [ext_resource type="Texture2D" uid="uid://clh0wa74fhnb6" path="res://Assets/Terrain/Terrain (16x16).png" id="2_ikgrp"]
 [ext_resource type="PackedScene" uid="uid://crrxc8i2tldfx" path="res://Scenes/main_character.tscn" id="3_gkovs"]
-[ext_resource type="Script" path="res://Scenes/main_character.gd" id="4_euq0c"]
+[ext_resource type="PackedScene" uid="uid://dpr02s6cg0y5y" path="res://Scenes/fuz_mob.tscn" id="5_gfskf"]
 [ext_resource type="PackedScene" uid="uid://c6yf5vqr2hesj" path="res://Scenes/cherry.tscn" id="6_uykyc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bg4d1"]
@@ -493,7 +493,7 @@ texture = ExtResource("2_ikgrp")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_bg4d1")
 
-[node name="Node" type="Node"]
+[node name="Game" type="Node"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 texture_filter = 1
@@ -511,7 +511,9 @@ layer_0/tile_data = PackedInt32Array(720896, 393216, 0, 720897, 458752, 0, 72089
 
 [node name="main_character" parent="." instance=ExtResource("3_gkovs")]
 position = Vector2(152, 462)
-script = ExtResource("4_euq0c")
 
 [node name="cherry" parent="." instance=ExtResource("6_uykyc")]
 position = Vector2(783, 348)
+
+[node name="FuzMob" parent="." instance=ExtResource("5_gfskf")]
+position = Vector2(748, 505)

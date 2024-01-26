@@ -1,0 +1,83 @@
+[gd_scene load_steps=10 format=3 uid="uid://dpr02s6cg0y5y"]
+
+[ext_resource type="Script" path="res://Scenes/fuz_mob.gd" id="1_5ntls"]
+[ext_resource type="Texture2D" uid="uid://cuaxss0ao24ls" path="res://Assets/Main Characters/Enemys/idle_fuz.png" id="2_ycsp0"]
+[ext_resource type="Texture2D" uid="uid://c01k0rqbulplx" path="res://Assets/Main Characters/Enemys/walk_fuz.png" id="3_yp1ow"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhj5d"]
+atlas = ExtResource("2_ycsp0")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg445"]
+atlas = ExtResource("2_ycsp0")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8nnvo"]
+atlas = ExtResource("3_yp1ow")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sd245"]
+atlas = ExtResource("3_yp1ow")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_j4kuh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lhj5d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wg445")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8nnvo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sd245")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lwicp"]
+height = 28.0
+
+[node name="FuzMob" type="CharacterBody2D"]
+script = ExtResource("1_5ntls")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_j4kuh")
+animation = &"walking"
+autoplay = "idle"
+frame_progress = 0.776721
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 6)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_lwicp")
+
+[node name="JumpTimer" type="Timer" parent="."]
+
+[node name="DeathParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 0.29
+randomness = 0.26
+lifetime_randomness = 0.23
+direction = Vector2(0, -1)
+spread = 29.16
+initial_velocity_min = 72.9
+initial_velocity_max = 272.9
+scale_amount_min = 0.0
+scale_amount_max = 26.45
+color = Color(0.466667, 0.466667, 0.466667, 1)
+
+[connection signal="timeout" from="JumpTimer" to="." method="_on_jump_timer_timeout"]
+[connection signal="finished" from="DeathParticles" to="." method="_on_death_particles_finished"]

@@ -10,6 +10,9 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var state = anim_tree.get("parameters/playback")
 @onready var camera = $ShakeCam
 var canDouble = false
+var direction
+var canSlam = false
+var canShoot = true
 
 func _physics_process(delta):
 		
@@ -20,11 +23,13 @@ func _physics_process(delta):
 	
 	else:
 		canDouble = false
+		canSlam = false
 		
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") && state.get_current_node()!="pound":
 		if(is_on_floor()):
 			canDouble = true
+			canSlam = true
 			velocity.y = JUMP_VELOCITY
 			anim_tree["parameters/conditions/is_double"] = false
 		elif canDouble:
@@ -37,9 +42,10 @@ func _physics_process(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction = Input.get_axis("ui_left", "ui_right")
+	direction = Input.get_axis("ui_left", "ui_right")
 	if direction && state.get_current_node()!="pound":
 		velocity.x = direction * SPEED
+		sprite_2d.flip_h = direction < 0
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		
@@ -47,23 +53,29 @@ func _physics_process(delta):
 		anim_tree["parameters/conditions/slam"] = true
 		velocity.y = - JUMP_VELOCITY
 		velocity.x = 0
-		if(is_on_floor()):
+		if(canSlam):
 				anim_tree["parameters/conditions/pound"] = true
 				anim_tree["parameters/conditions/slam"] = false
+				canSlam = false
 		else:
 			anim_tree["parameters/conditions/slam"] = false
 		
+		
+		
+	if Input.is_action_just_pressed("ui_page_down"):
+		shoot()
 	
 	update_animation()
 	move_and_slide()
 	
-	var isLeft = velocity.x < 0
-	sprite_2d.flip_h = isLeft
+	
 	
 	
 		
 	
 func update_animation():
+	
+	
 	
 	
 	if(velocity.x < -1 || velocity.x >1):
@@ -90,3 +102,18 @@ func update_animation():
 		anim_tree["parameters/conditions/is_double"] = false
 	if(state.get_current_node()=="pound"):
 		anim_tree["parameters/conditions/pound"] = false
+func shoot():
+	if(canShoot):
+		print("shoot")
+		const BOLT = preload("res://Scenes/bolt.tscn")
+		var new_bolt = BOLT.instantiate()
+		add_child(new_bolt)
+		new_bolt.global_position = global_position
+		new_bolt.global_position.y +=25
+		new_bolt.flip(sprite_2d.flip_h)
+		canShoot=false
+		$Timer.start()
+
+
+func _on_timer_timeout():
+	canShoot = true
