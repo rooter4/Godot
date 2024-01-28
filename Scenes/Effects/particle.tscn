@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0a3av5k0fr58"]
+
+[ext_resource type="Texture2D" uid="uid://dcxyvibda2tsq" path="res://Assets/Main Characters/Enemys/particle.png" id="2_in7bp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3oc6h"]
+
+[sub_resource type="GDScript" id="GDScript_ntisr"]
+script/source = "extends RigidBody2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vypho"]
+size = Vector2(8, 8)
+
+[node name="Particle" type="RigidBody2D"]
+mass = 5.56
+physics_material_override = SubResource("PhysicsMaterial_3oc6h")
+continuous_cd = 2
+script = SubResource("GDScript_ntisr")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+texture = ExtResource("2_in7bp")
+expand_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, 4)
+shape = SubResource("RectangleShape2D_vypho")

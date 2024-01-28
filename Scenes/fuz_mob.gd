@@ -5,6 +5,7 @@ const JUMP_VELOCITY = -600.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var player = get_node("/root/Game/main_character")
 var canJump = true
+var rand = RandomNumberGenerator.new()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,14 +36,16 @@ func take_damage():
 	particles_emit()
 	$ParticleTimer.start()
 	$AnimatedSprite2D.visible = false
+	$CollisionShape2D.disabled = true
 	
 
 func particles_emit():
 
-	const PART = preload("res://Scenes/particle.tscn")
-	for i in 10:
+	const PART = preload("res://Scenes/Effects/particle.tscn")
+	for i in 2:
 		var new_particle = PART.instantiate()
-		new_particle.linear_velocity.y = JUMP_VELOCITY
+		new_particle.linear_velocity.y = randf_range(JUMP_VELOCITY, 0)
+		new_particle.angular_velocity = randf_range(0,20)
 		add_child(new_particle)
 	
 
