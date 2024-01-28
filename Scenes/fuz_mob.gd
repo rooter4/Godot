@@ -32,8 +32,21 @@ func _on_jump_timer_timeout():
 func take_damage():
 	SPEED = 0
 	print("hit")
-	$DeathParticles.emitting = true
+	particles_emit()
+	$ParticleTimer.start()
+	$AnimatedSprite2D.visible = false
+	
+
+func particles_emit():
+
+	const PART = preload("res://Scenes/particle.tscn")
+	for i in 10:
+		var new_particle = PART.instantiate()
+		new_particle.linear_velocity.y = JUMP_VELOCITY
+		add_child(new_particle)
+	
 
 
-func _on_death_particles_finished():
+
+func _on_particle_timer_timeout():
 	queue_free()
