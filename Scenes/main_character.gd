@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 const SPEED = 400.0
 const JUMP_VELOCITY = -700.0
+signal health_change
+signal energy_change
 @onready var sprite_2d = $Sprite2D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -12,9 +14,10 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var canDouble = false
 var direction
 var canShoot = true
-var canPound = false
+var canPound = true
 var canDash = true
 var dashing = false
+var attack = false
 
 func _physics_process(delta):
 		
@@ -47,7 +50,7 @@ func _physics_process(delta):
 	if direction:
 		if(Input.is_action_just_pressed("ui_text_indent") && canDash):
 			canDash = false
-			velocity.x = direction * SPEED *5
+			velocity.x = direction * SPEED *2
 			$DashTimer.start()
 			dashing = true
 		elif not dashing:
@@ -56,19 +59,18 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
-	
+	if Input.is_action_just_pressed("ui_up"):
+		health_change.emit()
 		
-	if(Input.is_action_pressed("ui_down")):
-		print(str(velocity.y) + " : "+ str(gravity))
-		velocity.y = -JUMP_VELOCITY*2
-		velocity.x = 0
-		if(is_on_floor()&&state.get_current_node() == "slam"):
-			pound()
-	if(Input.is_action_just_released("ui_down")):
-		canPound = false
+	if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
+		pound()
 	
 	if Input.is_action_just_pressed("ui_page_down"):
 		shoot()
+	if(Input.is_action_just_pressed("ui_end")):
+		attack = true
+	else:
+		attack = false
 	
 	update_animation()
 	move_and_slide()
@@ -90,7 +92,6 @@ func update_animation():
 	
 	if(velocity.y > -JUMP_VELOCITY):
 		anim_tree["parameters/Air/conditions/slam"] = true
-		canPound = true
 
 	elif(velocity.y < -1):
 		anim_tree["parameters/conditions/jump"] = true
@@ -112,6 +113,11 @@ func update_animation():
 		anim_tree["parameters/Air/conditions/is_double"] = false
 	if(state.get_current_node()=="dash"):
 		anim_tree["parameters/conditions/dash"] = false
+		
+	if(attack):
+		anim_tree["parameters/conditions/attack"] = true
+	else:
+		anim_tree["parameters/conditions/attack"] = false
 	
 
 func shoot():
@@ -129,12 +135,14 @@ func shoot():
 		
 func pound():
 	if(canPound):
+		energy_change.emit()
 		canPound = false
 		const POUND = preload("res://Scenes/Attacks/pound.tscn")
 		var new_pound = POUND.instantiate()
 		add_child(new_pound)
 		canPound = false
 		$ShakeCam.add_trauma(.5)
+		$CooldownTimer.start()
 
 
 func _on_timer_timeout():
@@ -143,3 +151,8 @@ func _on_timer_timeout():
 func _on_dash_timer_timeout():
 	dashing = false
 	anim_tree["parameters/conditions/dash"] = false
+
+
+func _on_cooldown_timer_timeout():
+	canPound = true
+

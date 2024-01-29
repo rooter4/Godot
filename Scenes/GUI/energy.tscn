@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://bgq37n174xsx"]
+
+[ext_resource type="Texture2D" uid="uid://bugmipljv773c" path="res://Assets/Main Characters/Battery/charges.png" id="1_6hqa5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xbup"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrl0a"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nyl72"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1luj"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ennu"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sujmg"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mohqm"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(48, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2kly"]
+atlas = ExtResource("1_6hqa5")
+region = Rect2(56, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_iw4qo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xbup")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrl0a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nyl72")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1luj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ennu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sujmg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mohqm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2kly")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="Energy" type="MarginContainer"]
+offset_right = 23.0
+offset_bottom = 25.0
+theme_override_constants/margin_left = 16
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_iw4qo")
+autoplay = "default"
+centered = false

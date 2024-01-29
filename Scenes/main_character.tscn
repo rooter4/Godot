@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://crrxc8i2tldfx"]
+[gd_scene load_steps=55 format=3 uid="uid://crrxc8i2tldfx"]
 
 [ext_resource type="Script" path="res://Scenes/main_character.gd" id="1_3ufks"]
 [ext_resource type="Texture2D" uid="uid://buje44ctj60xt" path="res://Assets/Main Characters/Battery/run.png" id="1_382qp"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://c3hyqyh3sj53q" path="res://Assets/Main Characters/Battery/slam.png" id="4_kviws"]
 [ext_resource type="Texture2D" uid="uid://dyfvu3axx1emx" path="res://Assets/Main Characters/Battery/double.png" id="6_3di1m"]
 [ext_resource type="Texture2D" uid="uid://bj35rwlcrnnbb" path="res://Assets/Main Characters/Battery/dash.png" id="8_k4lgs"]
+[ext_resource type="Texture2D" uid="uid://bmmhmkay080or" path="res://Assets/Main Characters/Battery/whip.png" id="9_fsyij"]
+[ext_resource type="Script" path="res://Scenes/Attacks/Sword.gd" id="10_qfk5p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pj7jh"]
 size = Vector2(6.00017, 14)
@@ -49,6 +51,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sword/CollisionShape2D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_ht313"]
@@ -336,6 +350,59 @@ tracks/2/keys = {
 "values": [0, 1]
 }
 
+[sub_resource type="Animation" id="Animation_v8fmj"]
+resource_name = "whip"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("9_fsyij")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sword/CollisionShape2D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uc18g"]
 _data = {
 "RESET": SubResource("Animation_erpie"),
@@ -345,7 +412,8 @@ _data = {
 "idle": SubResource("Animation_ntao1"),
 "jump": SubResource("Animation_87775"),
 "running": SubResource("Animation_ehkax"),
-"slam": SubResource("Animation_p544l")
+"slam": SubResource("Animation_p544l"),
+"whip": SubResource("Animation_v8fmj")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l5we0"]
@@ -424,6 +492,9 @@ states/running/node = SubResource("AnimationNodeAnimation_yfap0")
 states/running/position = Vector2(475, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_7kthr"), "idle", "running", SubResource("AnimationNodeStateMachineTransition_puyd5"), "running", "idle", SubResource("AnimationNodeStateMachineTransition_wypyk")]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lkh0t"]
+animation = &"whip"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rmt7y"]
 animation = &"dash"
 
@@ -454,16 +525,37 @@ advance_condition = &"dash"
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pv245"]
+advance_mode = 2
+advance_condition = &"attack"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_leoxs"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ao2jt"]
+advance_mode = 2
+advance_condition = &"attack"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dptmn"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_qhudc"]
 states/Air/node = SubResource("AnimationNodeStateMachine_qhcyd")
 states/Air/position = Vector2(479, 100)
 states/Ground/node = SubResource("AnimationNodeStateMachine_63t8k")
 states/Ground/position = Vector2(282, 100)
 states/Start/position = Vector2(155, 100)
+states/Whip/node = SubResource("AnimationNodeAnimation_lkh0t")
+states/Whip/position = Vector2(472, -24)
 states/dash/node = SubResource("AnimationNodeAnimation_rmt7y")
 states/dash/position = Vector2(293, -9)
-transitions = ["Start", "Ground", SubResource("AnimationNodeStateMachineTransition_ai21q"), "Ground", "Air", SubResource("AnimationNodeStateMachineTransition_t0vck"), "Air", "Ground", SubResource("AnimationNodeStateMachineTransition_5bi8q"), "Ground", "dash", SubResource("AnimationNodeStateMachineTransition_4kls7"), "dash", "Ground", SubResource("AnimationNodeStateMachineTransition_fm4kb"), "Air", "dash", SubResource("AnimationNodeStateMachineTransition_18id7"), "dash", "Air", SubResource("AnimationNodeStateMachineTransition_anju5")]
+transitions = ["Start", "Ground", SubResource("AnimationNodeStateMachineTransition_ai21q"), "Ground", "Air", SubResource("AnimationNodeStateMachineTransition_t0vck"), "Air", "Ground", SubResource("AnimationNodeStateMachineTransition_5bi8q"), "Ground", "dash", SubResource("AnimationNodeStateMachineTransition_4kls7"), "dash", "Ground", SubResource("AnimationNodeStateMachineTransition_fm4kb"), "Air", "dash", SubResource("AnimationNodeStateMachineTransition_18id7"), "dash", "Air", SubResource("AnimationNodeStateMachineTransition_anju5"), "Ground", "Whip", SubResource("AnimationNodeStateMachineTransition_pv245"), "Whip", "Ground", SubResource("AnimationNodeStateMachineTransition_leoxs"), "Air", "Whip", SubResource("AnimationNodeStateMachineTransition_ao2jt"), "Whip", "Air", SubResource("AnimationNodeStateMachineTransition_dptmn")]
 graph_offset = Vector2(0, -97)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mecwu"]
+size = Vector2(19.0833, 2.66667)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 scale = Vector2(3, 3)
@@ -497,6 +589,7 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeStateMachine_qhudc")
 anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/attack = false
 parameters/conditions/dash = false
 parameters/conditions/jump = false
 parameters/conditions/on_floor = false
@@ -512,5 +605,20 @@ wait_time = 0.411
 [node name="DashTimer" type="Timer" parent="."]
 wait_time = 0.25
 
+[node name="CooldownTimer" type="Timer" parent="."]
+
+[node name="Sword" type="Area2D" parent="."]
+position = Vector2(-2.66667, 11)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("10_qfk5p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
+position = Vector2(9.125, -1.33333)
+shape = SubResource("RectangleShape2D_mecwu")
+disabled = true
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
+[connection signal="body_entered" from="Sword" to="Sword" method="_on_body_entered"]

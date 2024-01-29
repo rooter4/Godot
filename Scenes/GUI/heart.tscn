@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://b7ly0sefrb3x"]
+
+[ext_resource type="Texture2D" uid="uid://bpqyw4r4kjhhx" path="res://Assets/Main Characters/Battery/health.png" id="1_y183t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abmjt"]
+atlas = ExtResource("1_y183t")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mse6y"]
+atlas = ExtResource("1_y183t")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6fn6b"]
+atlas = ExtResource("1_y183t")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cp7qh"]
+atlas = ExtResource("1_y183t")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dq5ou"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abmjt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mse6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6fn6b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cp7qh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="heart" type="MarginContainer"]
+offset_right = 24.0
+offset_bottom = 24.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_dq5ou")
+autoplay = "default"
+frame = 3
+frame_progress = 0.410378
+centered = false

@@ -4,10 +4,10 @@ extends Area2D
 @onready var anim_position = global_position
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
-var speed = 10
+var speed = 15
 func _process(delta):
 	
-	global_position.x += speed
+	global_position.x += speed 
 	
 	
 	
