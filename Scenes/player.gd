@@ -5,6 +5,7 @@ const SPEED = 400.0
 const JUMP_VELOCITY = -700.0
 signal health_change
 signal energy_change
+signal damaged
 @onready var sprite_2d = $Sprite2D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -18,6 +19,16 @@ var canPound = true
 var canDash = true
 var dashing = false
 var attack = false
+var maxHealth = 10
+var health = 5
+var knockback = Vector2.ZERO
+var can_take_damage = true
+
+
+func _ready():
+	$AnimationTree.active = true
+	for i in health:
+		health_change.emit()
 
 func _physics_process(delta):
 		
@@ -50,12 +61,15 @@ func _physics_process(delta):
 	if direction:
 		if(Input.is_action_just_pressed("ui_text_indent") && canDash):
 			canDash = false
+			print(str(direction))
 			velocity.x = direction * SPEED *2
 			$DashTimer.start()
 			dashing = true
 		elif not dashing:
 			velocity.x = direction * SPEED
 			sprite_2d.flip_h = direction < 0
+			$Ponytail.scale.x = direction
+
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
@@ -67,19 +81,15 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("ui_page_down"):
 		shoot()
-	if(Input.is_action_just_pressed("ui_end")):
+	if(Input.is_action_pressed("ui_end")):
 		attack = true
 	else:
 		attack = false
 	
 	update_animation()
 	move_and_slide()
-
-	
+	knockback = lerp(knockback,Vector2.ZERO,0.1)
 func update_animation():
-	
-	
-	
 	
 	if(velocity.x > SPEED || velocity.x < -SPEED):
 		anim_tree["parameters/conditions/dash"] = true
@@ -144,7 +154,6 @@ func pound():
 		$ShakeCam.add_trauma(.5)
 		$CooldownTimer.start()
 
-
 func _on_timer_timeout():
 	canShoot = true
 
@@ -152,7 +161,27 @@ func _on_dash_timer_timeout():
 	dashing = false
 	anim_tree["parameters/conditions/dash"] = false
 
-
 func _on_cooldown_timer_timeout():
 	canPound = true
+func take_damage_p(amount, body):
+	if(can_take_damage):
+		can_take_damage = false
+		$DamageCooldown.start()
+		health -=1
+		damaged.emit()
+		var dir = global_position.direction_to(body.global_position)
+		dir = dir.normalized().snapped(Vector2.ONE)
+		print(str(dir))
+		var exp_force = dir *800
+		print(str(exp_force))
+		velocity.x = exp_force.x *-1
+		velocity.y = exp_force.y /2 * -1
+		var tween: Tween = create_tween()
+		tween.tween_property($Sprite2D, "modulate",Color.TRANSPARENT,0.1)
+		tween.tween_property($Sprite2D, "modulate",Color.WHITE,0.1)
+		move_and_slide()
 
+
+
+func _on_damage_cooldown_timeout():
+	can_take_damage = true

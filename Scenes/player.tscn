@@ -1,8 +1,8 @@
 [gd_scene load_steps=55 format=3 uid="uid://crrxc8i2tldfx"]
 
-[ext_resource type="Script" path="res://Scenes/main_character.gd" id="1_3ufks"]
 [ext_resource type="Texture2D" uid="uid://buje44ctj60xt" path="res://Assets/Main Characters/Battery/run.png" id="1_382qp"]
 [ext_resource type="Script" path="res://Scenes/Camera2D.gd" id="1_lk56t"]
+[ext_resource type="Script" path="res://Scenes/player.gd" id="1_r6tt5"]
 [ext_resource type="Texture2D" uid="uid://cgyuf2qw27xjp" path="res://Assets/Main Characters/Battery/idle.png" id="2_ce86f"]
 [ext_resource type="Texture2D" uid="uid://c0uyuuyy4de6" path="res://Assets/Main Characters/Battery/falling.png" id="3_dptbq"]
 [ext_resource type="Texture2D" uid="uid://c3hyqyh3sj53q" path="res://Assets/Main Characters/Battery/slam.png" id="4_kviws"]
@@ -55,7 +55,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Sword/CollisionShape2D:disabled")
+tracks/3/path = NodePath("Ponytail/CollisionShape2D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -393,7 +393,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Sword/CollisionShape2D:disabled")
+tracks/3/path = NodePath("Ponytail/CollisionShape2D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -555,11 +555,11 @@ transitions = ["Start", "Ground", SubResource("AnimationNodeStateMachineTransiti
 graph_offset = Vector2(0, -97)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mecwu"]
-size = Vector2(19.0833, 2.66667)
+size = Vector2(16.2708, 2.66667)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 scale = Vector2(3, 3)
-script = ExtResource("1_3ufks")
+script = ExtResource("1_r6tt5")
 
 [node name="ShakeCam" type="Camera2D" parent="."]
 scale = Vector2(0.333333, 0.333333)
@@ -584,6 +584,7 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
 libraries = {
 "": SubResource("AnimationLibrary_uc18g")
 }
@@ -607,18 +608,22 @@ wait_time = 0.25
 
 [node name="CooldownTimer" type="Timer" parent="."]
 
-[node name="Sword" type="Area2D" parent="."]
-position = Vector2(-2.66667, 11)
+[node name="Ponytail" type="Area2D" parent="."]
+position = Vector2(0.333333, 9)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("10_qfk5p")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
-position = Vector2(9.125, -1.33333)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ponytail"]
+position = Vector2(8.19792, 0)
 shape = SubResource("RectangleShape2D_mecwu")
 disabled = true
+
+[node name="DamageCooldown" type="Timer" parent="."]
+wait_time = 0.5
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
-[connection signal="body_entered" from="Sword" to="Sword" method="_on_body_entered"]
+[connection signal="body_entered" from="Ponytail" to="Ponytail" method="_on_body_entered"]
+[connection signal="timeout" from="DamageCooldown" to="." method="_on_damage_cooldown_timeout"]

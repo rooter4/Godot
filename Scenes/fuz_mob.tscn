@@ -66,20 +66,12 @@ shape = SubResource("CapsuleShape2D_lwicp")
 
 [node name="ParticleTimer" type="Timer" parent="."]
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-emitting = false
-amount = 5
-one_shot = true
-explosiveness = 0.5
-direction = Vector2(0, -1)
-initial_velocity_min = 418.04
-initial_velocity_max = 418.04
-angular_velocity_min = -39.19
-angular_velocity_max = 89.57
-scale_amount_min = 4.0
-scale_amount_max = 4.0
-color = Color(1, 0.054902, 0.054902, 1)
+[node name="DamageArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea"]
+position = Vector2(1, 6)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_lwicp")
 
 [connection signal="timeout" from="JumpTimer" to="." method="_on_jump_timer_timeout"]
-[connection signal="timeout" from="ParticleTimer" to="." method="_on_particle_timer_timeout"]
-[connection signal="finished" from="CPUParticles2D" to="." method="_on_cpu_particles_2d_finished"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]

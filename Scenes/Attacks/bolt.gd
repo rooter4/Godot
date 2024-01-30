@@ -22,5 +22,5 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 
 func _on_body_entered(body):
 	if body.has_method("take_damage"):
-		body.take_damage()
+		body.take_damage(1, self)
 		queue_free()

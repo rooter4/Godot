@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxk1p8s6p5mlw"]
+[gd_scene load_steps=12 format=3 uid="uid://bxk1p8s6p5mlw"]
 
 [ext_resource type="Texture2D" uid="uid://c8h8kai4u3qu0" path="res://Assets/Background/Green.png" id="1_lug7t"]
+[ext_resource type="Script" path="res://main.gd" id="1_rpp56"]
 [ext_resource type="Texture2D" uid="uid://clh0wa74fhnb6" path="res://Assets/Terrain/Terrain (16x16).png" id="2_ikgrp"]
-[ext_resource type="PackedScene" uid="uid://crrxc8i2tldfx" path="res://Scenes/main_character.tscn" id="3_gkovs"]
+[ext_resource type="PackedScene" uid="uid://crrxc8i2tldfx" path="res://Scenes/player.tscn" id="3_gkovs"]
 [ext_resource type="PackedScene" uid="uid://dpr02s6cg0y5y" path="res://Scenes/fuz_mob.tscn" id="5_gfskf"]
 [ext_resource type="Script" path="res://GUI.gd" id="6_b32mg"]
 [ext_resource type="PackedScene" uid="uid://c6yf5vqr2hesj" path="res://Scenes/cherry.tscn" id="6_uykyc"]
@@ -498,6 +499,7 @@ physics_layer_0/collision_mask = 3
 sources/0 = SubResource("TileSetAtlasSource_bg4d1")
 
 [node name="Game" type="Node"]
+script = ExtResource("1_rpp56")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 texture_filter = 1
@@ -522,7 +524,7 @@ position = Vector2(748, 505)
 collision_layer = 2
 collision_mask = 2
 
-[node name="main_character" parent="." instance=ExtResource("3_gkovs")]
+[node name="player" parent="." instance=ExtResource("3_gkovs")]
 position = Vector2(138, 418)
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -553,5 +555,7 @@ script = ExtResource("8_5o5n7")
 layout_mode = 2
 text = "Energy: "
 
-[connection signal="energy_change" from="main_character" to="GUI/MarginContainer/VBoxContainer/Energy" method="_on_main_character_energy_change"]
-[connection signal="health_change" from="main_character" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_main_character_health_change"]
+[connection signal="death" from="FuzMob" to="." method="_on_fuz_mob_death"]
+[connection signal="damaged" from="player" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_player_damaged"]
+[connection signal="energy_change" from="player" to="GUI/MarginContainer/VBoxContainer/Energy" method="_on_main_character_energy_change"]
+[connection signal="health_change" from="player" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_main_character_health_change"]
