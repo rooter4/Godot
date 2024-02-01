@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-
 const SPEED = 400.0
 const JUMP_VELOCITY = -700.0
 signal health_change
@@ -10,7 +9,9 @@ signal damaged
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var anim_tree = $AnimationTree
-@onready var state = anim_tree.get("parameters/Air/playback")
+@onready var state = anim_tree.get("parameters/playback")
+@onready var ground_state = anim_tree.get("parameters/ground/playback")
+@onready var air_state = anim_tree.get("parameters/air/playback")
 @onready var camera = $ShakeCam
 var canDouble = false
 var direction
@@ -31,35 +32,28 @@ func _ready():
 		health_change.emit()
 
 func _physics_process(delta):
-		
+	
+	if is_on_floor():
+		state.travel("ground")
+	
 	
 	# Add the gravity.
 	if not is_on_floor() && not dashing:
 		velocity.y += gravity * delta
+		state.travel("air")
 	elif dashing:
 		velocity.y = 0
 	else:
 		canDouble = false
 		canDash = true
 		
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept"):
-		if(is_on_floor()):
-			canDouble = true
-			velocity.y = JUMP_VELOCITY
-			anim_tree["parameters/Air/conditions/is_double"] = false
-		elif canDouble:
-			velocity.y = JUMP_VELOCITY
-			canDouble = false
-			anim_tree["parameters/Air/conditions/is_double"] = true
-
-		
 	
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	direction = Input.get_axis("ui_left", "ui_right")
 	if direction:
+		ground_state.travel("running")
+		print(str(direction))
 		if(Input.is_action_just_pressed("ui_text_indent") && canDash):
+			state.travel("dash")
 			canDash = false
 			print(str(direction))
 			velocity.x = direction * SPEED *2
@@ -67,11 +61,26 @@ func _physics_process(delta):
 			dashing = true
 		elif not dashing:
 			velocity.x = direction * SPEED
+			ground_state.travel("running")
 			sprite_2d.flip_h = direction < 0
 			$Ponytail.scale.x = direction
 
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
+		ground_state.travel("idle")
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept"):
+		if(is_on_floor()):
+			canDouble = true
+			velocity.y = JUMP_VELOCITY
+		elif canDouble:
+			velocity.y = JUMP_VELOCITY
+			canDouble = false
+			air_state.travel("double")
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	
 	
 	if Input.is_action_just_pressed("ui_up"):
 		health_change.emit()
@@ -86,49 +95,9 @@ func _physics_process(delta):
 	else:
 		attack = false
 	
-	update_animation()
+
 	move_and_slide()
 	knockback = lerp(knockback,Vector2.ZERO,0.1)
-func update_animation():
-	
-	if(velocity.x > SPEED || velocity.x < -SPEED):
-		anim_tree["parameters/conditions/dash"] = true
-	elif(velocity.x < -1 || velocity.x >1):
-		anim_tree["parameters/Ground/conditions/idle"] = false
-		anim_tree["parameters/Ground/conditions/is_moving"] = true
-	else:
-		anim_tree["parameters/Ground/conditions/is_moving"] = false
-		anim_tree["parameters/Ground/conditions/idle"] = true
-	
-	if(velocity.y > -JUMP_VELOCITY):
-		anim_tree["parameters/Air/conditions/slam"] = true
-
-	elif(velocity.y < -1):
-		anim_tree["parameters/conditions/jump"] = true
-		anim_tree["parameters/Air/conditions/falling"] = false
-		anim_tree["parameters/Air/conditions/slam"] = false
-	elif(velocity.y >1):
-		anim_tree["parameters/Air/conditions/falling"] = true
-		anim_tree["parameters/conditions/jump"] = false
-		anim_tree["parameters/Air/conditions/slam"] = false
-		
-	if(is_on_floor()):
-		anim_tree["parameters/conditions/on_floor"] = true
-		anim_tree["parameters/Air/conditions/falling"] = false
-		anim_tree["parameters/Air/conditions/slam"] = false
-	else:
-		anim_tree["parameters/conditions/on_floor"] = false
-		
-	if(state.get_current_node()=="double"):
-		anim_tree["parameters/Air/conditions/is_double"] = false
-	if(state.get_current_node()=="dash"):
-		anim_tree["parameters/conditions/dash"] = false
-		
-	if(attack):
-		anim_tree["parameters/conditions/attack"] = true
-	else:
-		anim_tree["parameters/conditions/attack"] = false
-	
 
 func shoot():
 	if(canShoot):
@@ -159,7 +128,7 @@ func _on_timer_timeout():
 
 func _on_dash_timer_timeout():
 	dashing = false
-	anim_tree["parameters/conditions/dash"] = false
+	state.travel("idle")
 
 func _on_cooldown_timer_timeout():
 	canPound = true
