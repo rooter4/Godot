@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const SPEED = 400.0
 const JUMP_VELOCITY = -700.0
+const DOUBLE_JUMP_VELOCITY = -450
 signal health_change
 signal energy_change
 signal damaged
@@ -19,7 +20,6 @@ var canShoot = true
 var canPound = true
 var canDash = true
 var dashing = false
-var attack = false
 var maxHealth = 10
 var health = 5
 var knockback = Vector2.ZERO
@@ -33,21 +33,27 @@ func _ready():
 
 func _physics_process(delta):
 	
+	
+	#Jump and gravity
 	if is_on_floor():
 		state.travel("ground")
-	
-	
-	# Add the gravity.
-	if not is_on_floor() && not dashing:
-		velocity.y += gravity * delta
-		state.travel("air")
-	elif dashing:
-		velocity.y = 0
-	else:
-		canDouble = false
 		canDash = true
-		
+		if Input.is_action_just_pressed("ui_accept"):
+			canDouble = true
+			velocity.y = JUMP_VELOCITY
+	elif not is_on_floor():
+		state.travel("air")
+		if Input.is_action_just_pressed("ui_accept") and canDouble:
+			velocity.y = DOUBLE_JUMP_VELOCITY
+			canDouble = false
+			air_state.travel("double")
+		elif dashing:
+			velocity.y = 0
+		else:
+			velocity.y += gravity * delta
 	
+	
+	#Left/Right and Dash input
 	direction = Input.get_axis("ui_left", "ui_right")
 	if direction:
 		ground_state.travel("running")
@@ -68,33 +74,13 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		ground_state.travel("idle")
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept"):
-		if(is_on_floor()):
-			canDouble = true
-			velocity.y = JUMP_VELOCITY
-		elif canDouble:
-			velocity.y = JUMP_VELOCITY
-			canDouble = false
-			air_state.travel("double")
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	
-	
-	if Input.is_action_just_pressed("ui_up"):
-		health_change.emit()
-		
 	if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
 		pound()
-	
 	if Input.is_action_just_pressed("ui_page_down"):
 		shoot()
 	if(Input.is_action_pressed("ui_end")):
-		attack = true
-	else:
-		attack = false
-	
+		state.travel("whip")
 
 	move_and_slide()
 	knockback = lerp(knockback,Vector2.ZERO,0.1)
