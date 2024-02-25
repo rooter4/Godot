@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=3 uid="uid://bemrxu7fbb3jo"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/Environment/saw.gd" id="1_1yh25"]
+[ext_resource type="Texture2D" uid="uid://t7uubh1ajf2k" path="res://Scenes/Levels/Level00/Saw/On (38x38).png" id="2_ar35e"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fhpxy"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(0, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cyu1s"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(38, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_csmla"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(76, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4r8rl"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(114, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hganr"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(152, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehuax"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(190, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2kpv"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(228, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5kva7"]
+atlas = ExtResource("2_ar35e")
+region = Rect2(266, 0, 38, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vwo0f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fhpxy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cyu1s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_csmla")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4r8rl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hganr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ehuax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2kpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5kva7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 30.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pbd4d"]
+radius = 19.0263
+
+[node name="Saw" type="StaticBody2D"]
+script = ExtResource("1_1yh25")
+metadata/interact = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vwo0f")
+autoplay = "default"
+frame = 2
+frame_progress = 0.412651
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pbd4d")
+
+[node name="RayCast2D2" type="RayCast2D" parent="."]
+position = Vector2(19, 0)
+target_position = Vector2(0, 22)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(-19, 0)
+target_position = Vector2(0, 22)

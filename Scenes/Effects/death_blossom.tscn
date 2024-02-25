@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bfrnbjdx2iagn"]
-
-[ext_resource type="Script" path="res://Scenes/Effects/death_blossom.gd" id="1_tnjw5"]
+[gd_scene format=3 uid="uid://bfrnbjdx2iagn"]
 
 [node name="DeathBlossom" type="CPUParticles2D"]
 emitting = false
@@ -15,4 +13,3 @@ angular_velocity_max = 89.57
 scale_amount_min = 4.0
 scale_amount_max = 4.0
 color = Color(1, 0.054902, 0.054902, 1)
-script = ExtResource("1_tnjw5")

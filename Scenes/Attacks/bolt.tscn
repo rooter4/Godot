@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://fuuice6evmg0"]
+[gd_scene load_steps=9 format=3 uid="uid://fuuice6evmg0"]
 
 [ext_resource type="Script" path="res://Scenes/Attacks/bolt.gd" id="1_ilt37"]
 [ext_resource type="Texture2D" uid="uid://dwq2uau5luc0w" path="res://Assets/Main Characters/Battery/bolt.png" id="2_v5ebm"]
@@ -6,75 +6,44 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7x8pp"]
 size = Vector2(7, 13)
 
-[sub_resource type="Animation" id="Animation_jat4p"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:hframes")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [3]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
+[sub_resource type="AtlasTexture" id="AtlasTexture_fx0s6"]
+atlas = ExtResource("2_v5ebm")
+region = Rect2(0, 0, 8, 4)
 
-[sub_resource type="Animation" id="Animation_2w63l"]
-resource_name = "bolt"
-length = 0.4
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:hframes")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [4]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
-}
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5p8w"]
+atlas = ExtResource("2_v5ebm")
+region = Rect2(8, 0, 8, 4)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_n0e6k"]
-_data = {
-"RESET": SubResource("Animation_jat4p"),
-"bolt": SubResource("Animation_2w63l")
-}
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjk1v"]
+atlas = ExtResource("2_v5ebm")
+region = Rect2(16, 0, 8, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybd2a"]
+atlas = ExtResource("2_v5ebm")
+region = Rect2(24, 0, 8, 4)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cbrfx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fx0s6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5p8w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjk1v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ybd2a")
+}],
+"loop": true,
+"name": &"default",
+"speed": 60.0
+}]
 
 [node name="lightning" type="Area2D"]
 script = ExtResource("1_ilt37")
-
-[node name="BoltSprite" type="Sprite2D" parent="."]
-texture_filter = 1
-texture = ExtResource("2_v5ebm")
-hframes = 3
 
 [node name="BoltCollision" type="CollisionShape2D" parent="."]
 position = Vector2(1.5, 0.5)
@@ -85,12 +54,9 @@ shape = SubResource("RectangleShape2D_7x8pp")
 position = Vector2(-0.5, 0.5)
 scale = Vector2(0.95, 0.35)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../BoltSprite")
-libraries = {
-"": SubResource("AnimationLibrary_n0e6k")
-}
-autoplay = "bolt"
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_cbrfx")
+autoplay = "default"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

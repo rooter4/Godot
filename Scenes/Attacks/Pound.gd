@@ -4,11 +4,11 @@ extends Area2D
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	global_position = anim_position
 
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished():
 	queue_free()
 
 

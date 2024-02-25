@@ -1,13 +1,13 @@
 extends Area2D
 
-@onready var bolt_sprite = $BoltSprite
+@onready var bolt_sprite = $AnimatedSprite2D
 @onready var anim_position = global_position
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
-var speed = 15
+var speed = 150
 func _process(delta):
 	
-	global_position.x += speed 
+	global_position.x += speed * delta
 	
 	
 	
