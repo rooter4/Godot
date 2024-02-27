@@ -515,7 +515,7 @@ states/ground/position = Vector2(317, 100)
 states/whip/node = SubResource("AnimationNodeAnimation_jvmeh")
 states/whip/position = Vector2(425, 196)
 transitions = ["Start", "ground", SubResource("AnimationNodeStateMachineTransition_tc0sw"), "air", "ground", SubResource("AnimationNodeStateMachineTransition_okcca"), "ground", "air", SubResource("AnimationNodeStateMachineTransition_x6pm3"), "ground", "whip", SubResource("AnimationNodeStateMachineTransition_ngcpg"), "whip", "ground", SubResource("AnimationNodeStateMachineTransition_rab0b"), "air", "whip", SubResource("AnimationNodeStateMachineTransition_nfhrn"), "whip", "air", SubResource("AnimationNodeStateMachineTransition_r0c7d"), "ground", "dash", SubResource("AnimationNodeStateMachineTransition_hh741"), "dash", "air", SubResource("AnimationNodeStateMachineTransition_ppo7o"), "air", "dash", SubResource("AnimationNodeStateMachineTransition_srkun"), "dash", "ground", SubResource("AnimationNodeStateMachineTransition_t6wvb")]
-graph_offset = Vector2(-15, -29)
+graph_offset = Vector2(-59.1682, -3.01621)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mecwu"]
 size = Vector2(16.2708, 2.66667)

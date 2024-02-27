@@ -1,0 +1,148 @@
+[gd_scene load_steps=22 format=3 uid="uid://02khsughok0f"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/Environment/portal.gd" id="1_e5oae"]
+[ext_resource type="Texture2D" uid="uid://bdfalh0r71dfm" path="res://Assets/Other/Gate_green.png" id="2_b3m8d"]
+[ext_resource type="Texture2D" uid="uid://dg8yr1j8tu4c2" path="res://Assets/Other/Gate_open.png" id="2_xsxfo"]
+[ext_resource type="Texture2D" uid="uid://dkrrg35kniapo" path="res://Assets/Other/Gate_idle_red.png" id="3_8qxml"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hury3"]
+size = Vector2(16, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_45es6"]
+atlas = ExtResource("2_b3m8d")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0iju8"]
+atlas = ExtResource("3_8qxml")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_otdt0"]
+atlas = ExtResource("3_8qxml")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxumx"]
+atlas = ExtResource("3_8qxml")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_166ra"]
+atlas = ExtResource("3_8qxml")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fetp"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bir7"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8x27"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gswy"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vqooh"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(128, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtcw4"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(160, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vsla3"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(192, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i245i"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(224, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4c8vb"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(256, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rstil"]
+atlas = ExtResource("2_xsxfo")
+region = Rect2(288, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u6jdm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_45es6")
+}],
+"loop": true,
+"name": &"green",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0iju8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otdt0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rxumx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_166ra")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fetp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bir7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8x27")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gswy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vqooh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtcw4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vsla3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i245i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4c8vb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rstil")
+}],
+"loop": false,
+"name": &"open",
+"speed": 10.0
+}]
+
+[node name="Portal" type="StaticBody2D"]
+script = ExtResource("1_e5oae")
+metadata/interact = true
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(8, 13)
+shape = SubResource("RectangleShape2D_hury3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_u6jdm")
+animation = &"green"
+autoplay = "idle"
+centered = false
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

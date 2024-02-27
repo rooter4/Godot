@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cifdfwic1ylf3"]
+[gd_scene load_steps=12 format=3 uid="uid://cifdfwic1ylf3"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/Level00/level_00.gd" id="1_2nodk"]
 [ext_resource type="Texture2D" uid="uid://ded3mva08vsro" path="res://Scenes/Levels/Level00/Purple.png" id="2_nb725"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://bfheej3so66fg" path="res://Scenes/Levels/Environment/floating_platform.tscn" id="4_bbtho"]
 [ext_resource type="PackedScene" uid="uid://bemrxu7fbb3jo" path="res://Scenes/Levels/Environment/saw.tscn" id="5_g17ad"]
 [ext_resource type="PackedScene" uid="uid://27d2tsxg32fb" path="res://Scenes/Levels/Environment/charge.tscn" id="6_fwk01"]
+[ext_resource type="PackedScene" uid="uid://02khsughok0f" path="res://Scenes/Levels/Environment/portal.tscn" id="7_eiamw"]
+[ext_resource type="PackedScene" uid="uid://cj6yiyhuj3xd8" path="res://Scenes/Levels/Environment/Extender.tscn" id="8_m7duw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g4i2q"]
 texture = ExtResource("3_6gfde")
@@ -889,5 +891,11 @@ shape = SubResource("RectangleShape2D_cangv")
 
 [node name="Charge" parent="." instance=ExtResource("6_fwk01")]
 position = Vector2(142, 272)
+
+[node name="Portal" parent="." instance=ExtResource("7_eiamw")]
+position = Vector2(257, 352)
+
+[node name="Extender" parent="." instance=ExtResource("8_m7duw")]
+position = Vector2(28, 328)
 
 [connection signal="body_entered" from="Bounds" to="." method="_on_bounds_body_entered"]

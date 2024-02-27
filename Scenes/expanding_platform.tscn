@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=3 uid="uid://680pc2n2ovwt"]
+
+[ext_resource type="Script" path="res://Scenes/expanding_platform.gd" id="1_anc0n"]
+[ext_resource type="Texture2D" uid="uid://q7sxad4xqrbp" path="res://Scenes/Levels/Level00/extending_plat.png" id="1_m7flb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m5oxu"]
+atlas = ExtResource("1_m7flb")
+region = Rect2(0, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hie8s"]
+atlas = ExtResource("1_m7flb")
+region = Rect2(16, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ioe0"]
+atlas = ExtResource("1_m7flb")
+region = Rect2(32, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1l8wv"]
+atlas = ExtResource("1_m7flb")
+region = Rect2(48, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dp60f"]
+atlas = ExtResource("1_m7flb")
+region = Rect2(64, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l17ca"]
+atlas = ExtResource("1_m7flb")
+region = Rect2(80, 0, 16, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vcxyw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m5oxu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hie8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ioe0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1l8wv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dp60f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l17ca")
+}],
+"loop": false,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_idm67"]
+size = Vector2(18, 2)
+
+[node name="ExpandingPlatform" type="StaticBody2D"]
+script = ExtResource("1_anc0n")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vcxyw")
+frame = 5
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_idm67")
+one_way_collision = true
+
+[connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]
