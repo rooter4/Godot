@@ -1,25 +1,22 @@
 [gd_scene load_steps=7 format=3 uid="uid://bxk1p8s6p5mlw"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_rpp56"]
+[ext_resource type="PackedScene" uid="uid://c6ni8uam2ljko" path="res://level_manager.tscn" id="2_ypgdi"]
+[ext_resource type="Script" path="res://PlayerManager.gd" id="3_fjybo"]
 [ext_resource type="PackedScene" uid="uid://crrxc8i2tldfx" path="res://Scenes/player.tscn" id="3_gkovs"]
-[ext_resource type="PackedScene" uid="uid://dpr02s6cg0y5y" path="res://Scenes/fuz_mob.tscn" id="5_gfskf"]
 [ext_resource type="Script" path="res://Scenes/GUI/HP.gd" id="7_5d2k0"]
 [ext_resource type="Script" path="res://Scenes/GUI/Energy.gd" id="8_5o5n7"]
-[ext_resource type="Script" path="res://Scenes/LevelManager.gd" id="13_4u4ra"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_rpp56")
 
-[node name="LevelManager" type="Node" parent="."]
-script = ExtResource("13_4u4ra")
-
-[node name="FuzMob" parent="." instance=ExtResource("5_gfskf")]
-position = Vector2(748, 505)
-collision_layer = 2
-collision_mask = 2
+[node name="LevelManager" parent="." instance=ExtResource("2_ypgdi")]
 
 [node name="player" parent="." instance=ExtResource("3_gkovs")]
 position = Vector2(1, 4.00003)
+
+[node name="PlayerManager" type="Node" parent="."]
+script = ExtResource("3_fjybo")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 offset = Vector2(20, 20)
@@ -48,8 +45,20 @@ script = ExtResource("8_5o5n7")
 layout_mode = 2
 text = "Energy: "
 
-[connection signal="death" from="FuzMob" to="." method="_on_fuz_mob_death"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "SAVE"
+
+[node name="Button2" type="Button" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "LOAD"
+
 [connection signal="damaged" from="player" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_player_damaged"]
 [connection signal="energy_change" from="player" to="GUI/MarginContainer/VBoxContainer/Energy" method="_on_main_character_energy_change"]
 [connection signal="energy_used" from="player" to="GUI/MarginContainer/VBoxContainer/Energy" method="_on_player_energy_used"]
 [connection signal="health_change" from="player" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_main_character_health_change"]
+[connection signal="pressed" from="GUI/MarginContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="GUI/MarginContainer/VBoxContainer/HBoxContainer/Button2" to="." method="_on_button_2_pressed"]

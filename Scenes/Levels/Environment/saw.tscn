@@ -71,6 +71,7 @@ animations = [{
 radius = 19.0263
 
 [node name="Saw" type="StaticBody2D"]
+scale = Vector2(0.5, 0.5)
 script = ExtResource("1_1yh25")
 metadata/interact = true
 

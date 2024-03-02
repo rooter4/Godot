@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://crrxc8i2tldfx"]
+[gd_scene load_steps=58 format=3 uid="uid://crrxc8i2tldfx"]
 
 [ext_resource type="Texture2D" uid="uid://buje44ctj60xt" path="res://Assets/Main Characters/Battery/run.png" id="1_382qp"]
 [ext_resource type="Script" path="res://Scenes/Camera2D.gd" id="1_lk56t"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bj35rwlcrnnbb" path="res://Assets/Main Characters/Battery/dash.png" id="8_k4lgs"]
 [ext_resource type="Texture2D" uid="uid://bmmhmkay080or" path="res://Assets/Main Characters/Battery/whip.png" id="9_fsyij"]
 [ext_resource type="Script" path="res://Scenes/Attacks/Sword.gd" id="10_qfk5p"]
+[ext_resource type="Texture2D" uid="uid://b4tbq51yqq0d0" path="res://Assets/Main Characters/Battery/wall.png" id="11_ic8ob"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pj7jh"]
 size = Vector2(6.00017, 9)
@@ -353,6 +354,45 @@ tracks/2/keys = {
 "values": [0, 1]
 }
 
+[sub_resource type="Animation" id="Animation_18k7f"]
+resource_name = "wall"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_ic8ob")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="Animation" id="Animation_v8fmj"]
 resource_name = "whip"
 length = 0.3
@@ -416,6 +456,7 @@ _data = {
 "jump": SubResource("Animation_87775"),
 "running": SubResource("Animation_ehkax"),
 "slam": SubResource("Animation_p544l"),
+"wall": SubResource("Animation_18k7f"),
 "whip": SubResource("Animation_v8fmj")
 }
 
@@ -427,6 +468,9 @@ animation = &"fall"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gr8di"]
 animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_py025"]
+animation = &"wall"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2ku8c"]
 advance_mode = 2
@@ -441,6 +485,10 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_au5ee"]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kpmw1"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_blx0s"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_uohux"]
 states/double/node = SubResource("AnimationNodeAnimation_d0xib")
 states/double/position = Vector2(475, 208)
@@ -448,8 +496,10 @@ states/fall/node = SubResource("AnimationNodeAnimation_0jup2")
 states/fall/position = Vector2(438, 97)
 states/jump/node = SubResource("AnimationNodeAnimation_gr8di")
 states/jump/position = Vector2(330, 100)
-transitions = ["Start", "jump", SubResource("AnimationNodeStateMachineTransition_2ku8c"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_wjudu"), "jump", "double", SubResource("AnimationNodeStateMachineTransition_v07vy"), "double", "fall", SubResource("AnimationNodeStateMachineTransition_wfy55"), "fall", "End", SubResource("AnimationNodeStateMachineTransition_au5ee")]
-graph_offset = Vector2(-47, 39)
+states/wall/node = SubResource("AnimationNodeAnimation_py025")
+states/wall/position = Vector2(330, 208)
+transitions = ["Start", "jump", SubResource("AnimationNodeStateMachineTransition_2ku8c"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_wjudu"), "jump", "double", SubResource("AnimationNodeStateMachineTransition_v07vy"), "double", "fall", SubResource("AnimationNodeStateMachineTransition_wfy55"), "fall", "End", SubResource("AnimationNodeStateMachineTransition_au5ee"), "jump", "wall", SubResource("AnimationNodeStateMachineTransition_kpmw1"), "wall", "jump", SubResource("AnimationNodeStateMachineTransition_blx0s")]
+graph_offset = Vector2(-126, 77)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5w2aw"]
 animation = &"dash"
@@ -520,7 +570,7 @@ graph_offset = Vector2(-59.1682, -3.01621)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mecwu"]
 size = Vector2(16.2708, 2.66667)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["Persist"]]
 script = ExtResource("1_r6tt5")
 
 [node name="ShakeCam" type="Camera2D" parent="."]
@@ -580,9 +630,12 @@ wait_time = 0.5
 [node name="PauseTimer" type="Timer" parent="."]
 wait_time = 0.001
 
+[node name="CoyoteTimer" type="Timer" parent="."]
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
 [connection signal="body_entered" from="Ponytail" to="Ponytail" method="_on_body_entered"]
 [connection signal="timeout" from="DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
 [connection signal="timeout" from="PauseTimer" to="." method="_on_pause_timer_timeout"]
+[connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

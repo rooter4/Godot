@@ -7,5 +7,4 @@ func play_animation():
 
 
 func _on_sprite_animation_finished():
-	print("anim here")
 	animation_complete.emit()

@@ -27,34 +27,41 @@ var max_energy = 10
 var energy = 5
 var knockback = Vector2.ZERO
 var can_take_damage = true
-
+var coyote_frames = 10
+var coyote = false
+var last_floor
 var can_move = true
+var can_wall_jump = false
+var jumping = false
 
 func _ready():
 	$AnimationTree.active = true
 	health_change.emit(health)
 	energy_change.emit(energy)
+	$CoyoteTimer.wait_time = coyote_frames/60.0
 	
 
 func _physics_process(delta):
+	
 	if(can_move):
-	#Jump and gravity
 		if is_on_floor():
 			state.travel("ground")
 			canDash = true
-			if Input.is_action_just_pressed("ui_accept"):
-				canDouble = true
-				velocity.y = JUMP_VELOCITY
-		elif not is_on_floor():
+			jumping = false
+			coyote = false
+			can_wall_jump = true
+		else:
 			state.travel("air")
-			if Input.is_action_just_pressed("ui_accept") and canDouble:
-				velocity.y = DOUBLE_JUMP_VELOCITY
-				canDouble = false
-			elif dashing:
-				velocity.y = 0
-			else:
-				velocity.y += gravity * delta
+			
+		if is_on_wall_only():
+			air_state.travel("wall")
+			
+		handle_jump(delta)
 		
+		if dashing:
+			velocity.y = 0
+		else:
+			velocity.y += gravity * delta
 		
 		#Left/Right and Dash input
 		direction = Input.get_axis("ui_left", "ui_right")
@@ -76,6 +83,9 @@ func _physics_process(delta):
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			ground_state.travel("idle")
+			
+		
+				
 
 		if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
 			pound()
@@ -86,21 +96,46 @@ func _physics_process(delta):
 
 		if velocity.y < -980:
 			velocity.y = -980
+		last_floor = is_on_floor()
 		move_and_slide()
+		if !is_on_floor() and last_floor and !jumping:
+			coyote = true
+			print("Coyote!!")
+			$CoyoteTimer.start()
 		
 		for i in get_slide_collision_count():
 			var collision = get_slide_collision(i)
 			if collision.get_collider().has_meta("interact"):
 				print("interact")
-				$PauseTimer.wait_time = collision.get_collider().interact(self)
-				$PauseTimer.start()
-				_pause()
+				var wait_time = collision.get_collider().interact(self)
+				if(wait_time > 0.0):
+					$PauseTimer.wait_time = wait_time
+					print(wait_time)
+					$PauseTimer.start()
+					_pause()
 				break
 				
 		
 		knockback = lerp(knockback,Vector2.ZERO,0.1)
 	else:
 		$Sprite2D.visible = false
+		
+func handle_jump(delta):
+	if Input.is_action_just_pressed("ui_accept"):
+		if is_on_floor() or coyote:
+			canDouble = true
+			velocity.y = JUMP_VELOCITY
+			jumping = true
+		elif is_on_wall_only() && can_wall_jump:
+			velocity.y = JUMP_VELOCITY
+			can_wall_jump = false
+			velocity.x = -get_wall_normal().x * JUMP_VELOCITY
+		elif not is_on_floor() and canDouble and not coyote:
+			velocity.y = DOUBLE_JUMP_VELOCITY
+			canDouble = false
+
+
+
 
 func shoot():
 	if(canShoot):
@@ -156,15 +191,11 @@ func take_damage_p(amount, body):
 		else:
 			get_tree().reload_current_scene()
 
-
-
 func _on_damage_cooldown_timeout():
 	can_take_damage = true
-
 func _pause():
 	can_move = false
 	$Sprite2D.visible = false
-
 func _on_pause_timer_timeout():
 	can_move = true
 	$Sprite2D.visible = true
@@ -175,4 +206,18 @@ func change_energy(number):
 	if energy < 0:
 		energy = 0
 	energy_change.emit(energy)
-	
+
+func _on_coyote_timer_timeout():
+	coyote = false
+func save():
+	var save_dict = {
+		"object": get_path(),
+		"can_double": false,
+		"can_dash": false,
+		"can_wall_jump": false
+		}
+	return save_dict
+func load(data):
+	print(str(data))
+func set_abilities():
+	print("set1")

@@ -5,7 +5,7 @@ var current_plat = 0
 var desired_plat = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	activate(10)
+	visible = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -23,6 +23,10 @@ func add_plat():
 	new_plat.play_animation()
 	new_plat.animation_complete.connect(_on_expanding_platform_animation_complete)
 func _on_expanding_platform_animation_complete():
-	print("here")
 	if(current_plat<desired_plat):
 		add_plat()
+
+
+func _on_portal_extend_bridge():
+	visible = true
+	activate(5)
