@@ -1,9 +1,10 @@
-[gd_scene load_steps=58 format=3 uid="uid://crrxc8i2tldfx"]
+[gd_scene load_steps=59 format=3 uid="uid://crrxc8i2tldfx"]
 
 [ext_resource type="Texture2D" uid="uid://buje44ctj60xt" path="res://Assets/Main Characters/Battery/run.png" id="1_382qp"]
 [ext_resource type="Script" path="res://Scenes/Camera2D.gd" id="1_lk56t"]
 [ext_resource type="Script" path="res://Scenes/player.gd" id="1_r6tt5"]
 [ext_resource type="Texture2D" uid="uid://cgyuf2qw27xjp" path="res://Assets/Main Characters/Battery/idle.png" id="2_ce86f"]
+[ext_resource type="Texture2D" uid="uid://mcjcon1164ib" path="res://Assets/Other/2d_lights_and_shadows_neutral_point_light.webp" id="2_fn0dv"]
 [ext_resource type="Texture2D" uid="uid://c0uyuuyy4de6" path="res://Assets/Main Characters/Battery/falling.png" id="3_dptbq"]
 [ext_resource type="Texture2D" uid="uid://c3hyqyh3sj53q" path="res://Assets/Main Characters/Battery/slam.png" id="4_kviws"]
 [ext_resource type="Texture2D" uid="uid://dyfvu3axx1emx" path="res://Assets/Main Characters/Battery/double.png" id="6_3di1m"]
@@ -570,8 +571,13 @@ graph_offset = Vector2(-59.1682, -3.01621)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mecwu"]
 size = Vector2(16.2708, 2.66667)
 
-[node name="Player" type="CharacterBody2D" groups=["Persist"]]
+[node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_r6tt5")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+shadow_enabled = true
+shadow_item_cull_mask = 3
+texture = ExtResource("2_fn0dv")
 
 [node name="ShakeCam" type="Camera2D" parent="."]
 scale = Vector2(0.333333, 0.333333)

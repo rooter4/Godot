@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxk1p8s6p5mlw"]
+
+[ext_resource type="Script" path="res://Scenes/Game Tree/Game.gd" id="1_1qmmh"]
+[ext_resource type="PackedScene" uid="uid://c6ni8uam2ljko" path="res://level_manager.tscn" id="2_q5onu"]
+[ext_resource type="Script" path="res://PlayerManager.gd" id="3_o5aii"]
+[ext_resource type="Script" path="res://Scenes/GUI/HP.gd" id="4_f05gq"]
+[ext_resource type="PackedScene" uid="uid://crrxc8i2tldfx" path="res://Scenes/player.tscn" id="4_r3yll"]
+[ext_resource type="Script" path="res://Scenes/GUI/Energy.gd" id="5_3wle2"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_1qmmh")
+
+[node name="LevelManager" parent="." instance=ExtResource("2_q5onu")]
+
+[node name="PlayerManager" type="Node" parent="." groups=["Persist"]]
+script = ExtResource("3_o5aii")
+
+[node name="Player" parent="PlayerManager" instance=ExtResource("4_r3yll")]
+
+[node name="GUI" type="CanvasLayer" parent="."]
+offset = Vector2(20, 20)
+transform = Transform2D(1, 0, 0, 1, 20, 20)
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI"]
+offset_right = 569.0
+offset_bottom = 50.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MarginContainer"]
+layout_mode = 2
+
+[node name="HP" type="HBoxContainer" parent="GUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("4_f05gq")
+
+[node name="Label" type="Label" parent="GUI/MarginContainer/VBoxContainer/HP"]
+layout_mode = 2
+text = "HP:"
+
+[node name="Energy" type="HBoxContainer" parent="GUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("5_3wle2")
+
+[node name="Label" type="Label" parent="GUI/MarginContainer/VBoxContainer/Energy"]
+layout_mode = 2
+text = "Energy: "
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "SAVE"
+
+[node name="Button2" type="Button" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "LOAD"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButton2" type="CheckButton" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Double Jump"
+
+[node name="CheckButton3" type="CheckButton" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Dash"
+
+[node name="CheckButton" type="CheckButton" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Shoot"
+
+[node name="CheckButton4" type="CheckButton" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Pound"
+
+[connection signal="energy_change" from="PlayerManager/Player" to="GUI/MarginContainer/VBoxContainer/Energy" method="_on_player_energy_change"]
+[connection signal="health_change" from="PlayerManager/Player" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_player_health_change"]
+[connection signal="pressed" from="GUI/MarginContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="GUI/MarginContainer/VBoxContainer/HBoxContainer/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton2" to="PlayerManager" method="_on_check_button_2_toggled"]
+[connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton3" to="PlayerManager" method="_on_check_button_3_toggled"]
+[connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton" to="PlayerManager" method="_on_check_button_toggled"]
+[connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton4" to="PlayerManager" method="_on_check_button_4_toggled"]

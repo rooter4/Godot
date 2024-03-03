@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://dkaasmasmfgnx"]
+
+[ext_resource type="Texture2D" uid="uid://dcc2rak50rrfp" path="res://Scenes/Effects/double_poof.png" id="1_xu4y2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2oih2"]
+atlas = ExtResource("1_xu4y2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kaf7h"]
+atlas = ExtResource("1_xu4y2")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ysuw4"]
+atlas = ExtResource("1_xu4y2")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ry64"]
+atlas = ExtResource("1_xu4y2")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ckwi8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2oih2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kaf7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ysuw4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ry64")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ckwi8")
+autoplay = "default"

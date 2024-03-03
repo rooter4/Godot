@@ -8,20 +8,21 @@ signal energy_change
 signal damaged
 signal energy_used
 @onready var sprite_2d = $Sprite2D
-
+const JUMP_POOF = preload("res://Scenes/Effects/JumpPoof.tscn")
+const DOUBLE_POOF = preload("res://Scenes/Effects/DoublePoof.tscn")
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var anim_tree = $AnimationTree
 @onready var state = anim_tree.get("parameters/playback")
 @onready var ground_state = anim_tree.get("parameters/ground/playback")
 @onready var air_state = anim_tree.get("parameters/air/playback")
 @onready var camera = $ShakeCam
-var canDouble = false
+var can_double = false
 var direction
-var canShoot = true
-var canPound = true
-var canDash = true
+var can_shoot = true
+var can_pound = true
+var can_dash = true
 var dashing = false
-var maxHealth = 10
+var max_health = 10
 var health = 5
 var max_energy = 10
 var energy = 5
@@ -46,7 +47,7 @@ func _physics_process(delta):
 	if(can_move):
 		if is_on_floor():
 			state.travel("ground")
-			canDash = true
+			can_dash = true
 			jumping = false
 			coyote = false
 			can_wall_jump = true
@@ -56,7 +57,7 @@ func _physics_process(delta):
 		if is_on_wall_only():
 			air_state.travel("wall")
 			
-		handle_jump(delta)
+		handle_jump()
 		
 		if dashing:
 			velocity.y = 0
@@ -67,25 +68,16 @@ func _physics_process(delta):
 		direction = Input.get_axis("ui_left", "ui_right")
 		if direction:
 			ground_state.travel("running")
-			if(Input.is_action_just_pressed("ui_text_indent") && canDash):
-				state.travel("dash")
-				canDash = false
-
-				velocity.x = direction * SPEED *2
-				$DashTimer.start()
-				dashing = true
+			if(Input.is_action_just_pressed("ui_text_indent")):
+				handle_dash()
 			elif not dashing:
 				velocity.x = direction * SPEED
 				ground_state.travel("running")
 				sprite_2d.flip_h = direction < 0
 				$Ponytail.scale.x = direction
-
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			ground_state.travel("idle")
-			
-		
-				
 
 		if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
 			pound()
@@ -120,25 +112,39 @@ func _physics_process(delta):
 	else:
 		$Sprite2D.visible = false
 		
-func handle_jump(delta):
-	if Input.is_action_just_pressed("ui_accept"):
+func handle_jump():
+	var check_double = get_parent().call("ability_check","ability_double")
+	var check_wall= get_parent().call("ability_check","ability_wall_jump")
+	
+	if Input.is_action_just_pressed("jump"):
 		if is_on_floor() or coyote:
-			canDouble = true
+			var jump_poof = JUMP_POOF.instantiate()
+			add_child(jump_poof)
+			can_double = true
 			velocity.y = JUMP_VELOCITY
 			jumping = true
-		elif is_on_wall_only() && can_wall_jump:
+		elif is_on_wall_only() and can_wall_jump and check_wall:
 			velocity.y = JUMP_VELOCITY
 			can_wall_jump = false
 			velocity.x = -get_wall_normal().x * JUMP_VELOCITY
-		elif not is_on_floor() and canDouble and not coyote:
-			velocity.y = DOUBLE_JUMP_VELOCITY
-			canDouble = false
-
-
-
+		elif not is_on_floor() and can_double and check_double and not coyote:
+			velocity.y = DOUBLE_JUMP_VELOCITY 
+			can_double = false
+			var double_poof  = DOUBLE_POOF.instantiate()
+			add_child(double_poof)
+			
+func handle_dash():
+	var check = get_parent().call("ability_check","ability_dash")
+	if can_dash and check:
+		state.travel("dash")
+		can_dash = false
+		velocity.x = direction * SPEED *2
+		$DashTimer.start()
+		dashing = true
 
 func shoot():
-	if(canShoot):
+	var check = get_parent().call("ability_check","ability_shoot")
+	if(can_shoot and check):
 		const BOLT = preload("res://Scenes/Attacks/bolt.tscn")
 		var new_bolt = BOLT.instantiate()
 		get_parent().add_child(new_bolt)
@@ -147,29 +153,31 @@ func shoot():
 		new_bolt.global_position.x +=5
 		new_bolt.flip(sprite_2d.flip_h)
 		
-		canShoot=false
+		can_shoot=false
 		$Timer.start()
 		
 func pound():
-	if(canPound && energy != 0):
+	var check = get_parent().call("ability_check","ability_pound")
+	if(can_pound and energy != 0 and check):
 		change_energy(-1)
-		canPound = false
+		can_pound = false
 		const POUND = preload("res://Scenes/Attacks/pound.tscn")
 		var new_pound = POUND.instantiate()
 		add_child(new_pound)
-		canPound = false
+		can_pound = false
 		$ShakeCam.add_trauma(.5)
 		$CooldownTimer.start()
 
 func _on_timer_timeout():
-	canShoot = true
+	can_shoot = true
 
 func _on_dash_timer_timeout():
 	dashing = false
 	state.travel("idle")
 
 func _on_cooldown_timer_timeout():
-	canPound = true
+	can_pound = true
+	
 func take_damage_p(amount, body):
 	if(can_take_damage):
 		can_take_damage = false
@@ -209,15 +217,5 @@ func change_energy(number):
 
 func _on_coyote_timer_timeout():
 	coyote = false
-func save():
-	var save_dict = {
-		"object": get_path(),
-		"can_double": false,
-		"can_dash": false,
-		"can_wall_jump": false
-		}
-	return save_dict
-func load(data):
-	print(str(data))
-func set_abilities():
-	print("set1")
+
+	

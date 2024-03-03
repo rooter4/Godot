@@ -1,0 +1,171 @@
+[gd_scene load_steps=7 format=3 uid="uid://btggimlx3vvs7"]
+
+[ext_resource type="Texture2D" uid="uid://y4dlq83w2yey" path="res://Assets/Background/Yellow.png" id="1_r4hay"]
+[ext_resource type="Script" path="res://Scenes/Game Tree/MainMenu.gd" id="1_syonn"]
+[ext_resource type="Texture2D" uid="uid://cgm6e3bpc1ch7" path="res://icon.svg" id="2_uwmj0"]
+
+[sub_resource type="Animation" id="Animation_1nw41"]
+resource_name = "button_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Start Game:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-187, 450), Vector2(350, 450)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Exit:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1232, 450), Vector2(700, 450)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Load Game:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-1, 664), Vector2(475, 450)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Settings:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1095, 665), Vector2(600, 450)]
+}
+
+[sub_resource type="Animation" id="Animation_dmdeh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Start Game:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-187, 450)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Exit:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1232, 450)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Load Game:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 664)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Settings:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1095, 665)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bpem6"]
+_data = {
+"RESET": SubResource("Animation_dmdeh"),
+"button_in": SubResource("Animation_1nw41")
+}
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("1_syonn")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1160.0
+offset_bottom = 651.0
+texture = ExtResource("1_r4hay")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Logo" type="TextureRect" parent="."]
+offset_left = 525.0
+offset_top = 300.0
+offset_right = 653.0
+offset_bottom = 428.0
+texture = ExtResource("2_uwmj0")
+
+[node name="Settings" type="Button" parent="."]
+offset_left = 1095.0
+offset_top = 665.0
+offset_right = 1165.0
+offset_bottom = 696.0
+text = "Settings
+"
+
+[node name="Start Game" type="Button" parent="."]
+offset_left = -187.0
+offset_top = 450.0
+offset_right = -91.0
+offset_bottom = 481.0
+text = "Start Game
+"
+
+[node name="Exit" type="Button" parent="."]
+offset_left = 1232.0
+offset_top = 450.0
+offset_right = 1269.0
+offset_bottom = 481.0
+text = "Exit
+"
+
+[node name="Load Game" type="Button" parent="."]
+offset_left = -1.0
+offset_top = 664.0
+offset_right = 95.0
+offset_bottom = 695.0
+text = "Load Game
+"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bpem6")
+}
+autoplay = "button_in"
+
+[connection signal="pressed" from="Start Game" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

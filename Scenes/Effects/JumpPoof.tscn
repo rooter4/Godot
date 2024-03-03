@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://cyjfpeugy3eag"]
+
+[ext_resource type="Texture2D" uid="uid://caaqcianj4ajt" path="res://Scenes/Effects/jump_poof.png" id="1_5jjs2"]
+[ext_resource type="Script" path="res://Scenes/Effects/JumpPoof.gd" id="1_ruo1j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qvnux"]
+atlas = ExtResource("1_5jjs2")
+region = Rect2(0, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skoph"]
+atlas = ExtResource("1_5jjs2")
+region = Rect2(16, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtimn"]
+atlas = ExtResource("1_5jjs2")
+region = Rect2(32, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gjs25"]
+atlas = ExtResource("1_5jjs2")
+region = Rect2(48, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6n1c"]
+atlas = ExtResource("1_5jjs2")
+region = Rect2(64, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lr8fv"]
+atlas = ExtResource("1_5jjs2")
+region = Rect2(80, 0, 16, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lnfnx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qvnux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_skoph")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtimn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gjs25")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f6n1c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lr8fv")
+}],
+"loop": false,
+"name": &"default",
+"speed": 21.0
+}]
+
+[node name="JumpPoof" type="Node2D"]
+script = ExtResource("1_ruo1j")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 12)
+sprite_frames = SubResource("SpriteFrames_lnfnx")
+autoplay = "default"
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

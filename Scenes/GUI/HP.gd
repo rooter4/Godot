@@ -5,8 +5,7 @@ const HEART = preload("res://Scenes/GUI/heart.tscn")
 var stagger = 0
 var hearts_displayed = 0
 
-func _on_main_character_health_change(number):
-	
+func _on_player_health_change(number):
 	for i in get_child_count() -1:
 		get_child(get_child_count()-1-i).queue_free()
 		

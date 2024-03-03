@@ -3,7 +3,7 @@ extends HBoxContainer
 const ENERGY = preload("res://Scenes/GUI/energy.tscn")
 var stagger = 0
 
-func _on_main_character_energy_change(number):
+func _on_player_energy_change(number):
 	for i in get_child_count() -1:
 			get_child(get_child_count()-1-i).queue_free()
 	for i in number:
@@ -12,4 +12,3 @@ func _on_main_character_energy_change(number):
 		add_child(new_energy)
 		stagger+=1
 		if stagger >4: stagger = 0
-

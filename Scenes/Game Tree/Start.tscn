@@ -1,0 +1,171 @@
+[gd_scene load_steps=8 format=3 uid="uid://cae5a36i47mc7"]
+
+[ext_resource type="Script" path="res://Scenes/Game Tree/Start.gd" id="1_an3vn"]
+[ext_resource type="Texture2D" uid="uid://y4dlq83w2yey" path="res://Assets/Background/Yellow.png" id="2_8fkfm"]
+[ext_resource type="Texture2D" uid="uid://cgm6e3bpc1ch7" path="res://icon.svg" id="3_oe62u"]
+
+[sub_resource type="Animation" id="Animation_d5iv4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(315, -188)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Title:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(848, 150)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Button:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(415, 500)]
+}
+
+[sub_resource type="Animation" id="Animation_kkhdj"]
+resource_name = "logo_in"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(525, -192), Vector2(525, 300)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Title:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1173, 270), Vector2(539, 270)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Button:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(565, 665), Vector2(565, 450)]
+}
+
+[sub_resource type="Animation" id="Animation_cbavy"]
+resource_name = "button_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(525, 300)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Button:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(565, 450), Vector2(565, 1000)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Title:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(539, 270), Vector2(539, -100)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yfkek"]
+_data = {
+"RESET": SubResource("Animation_d5iv4"),
+"button_out": SubResource("Animation_cbavy"),
+"logo_in": SubResource("Animation_kkhdj")
+}
+
+[node name="Start" type="Node"]
+script = ExtResource("1_an3vn")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1151.0
+offset_bottom = 649.0
+texture = ExtResource("2_8fkfm")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_yfkek")
+}
+autoplay = "logo_in"
+
+[node name="Logo" type="TextureRect" parent="."]
+offset_left = 315.0
+offset_top = -188.0
+offset_right = 443.0
+offset_bottom = -60.0
+texture = ExtResource("3_oe62u")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 415.0
+offset_top = 500.0
+offset_right = 471.0
+offset_bottom = 531.0
+text = "START
+"
+
+[node name="Title" type="Label" parent="."]
+offset_left = 848.0
+offset_top = 150.0
+offset_right = 947.0
+offset_bottom = 173.0
+text = "Luke's Game"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

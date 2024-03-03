@@ -76,6 +76,7 @@ script = ExtResource("1_1yh25")
 metadata/interact = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+light_mask = 3
 sprite_frames = SubResource("SpriteFrames_vwo0f")
 autoplay = "default"
 frame = 2

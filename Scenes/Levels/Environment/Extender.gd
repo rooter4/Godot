@@ -7,10 +7,6 @@ var desired_plat = 0
 func _ready():
 	visible = false
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 func activate(number):
 	$ExpandingPlatform.play_animation()
 	desired_plat = number
