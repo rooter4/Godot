@@ -575,11 +575,14 @@ size = Vector2(16.2708, 2.66667)
 script = ExtResource("1_r6tt5")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, 12)
+color = Color(1, 1, 0.603922, 1)
 shadow_enabled = true
 shadow_item_cull_mask = 3
 texture = ExtResource("2_fn0dv")
 
 [node name="ShakeCam" type="Camera2D" parent="."]
+position = Vector2(0, 12)
 scale = Vector2(0.333333, 0.333333)
 zoom = Vector2(3, 3)
 position_smoothing_enabled = true

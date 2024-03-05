@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const SPEED = 100.0
+const FRICTION = 20
 const JUMP_VELOCITY = -300.0
 const DOUBLE_JUMP_VELOCITY = -150
 signal health_change
@@ -28,7 +29,7 @@ var max_energy = 10
 var energy = 5
 var knockback = Vector2.ZERO
 var can_take_damage = true
-var coyote_frames = 10
+var coyote_frames = 15
 var coyote = false
 var last_floor
 var can_move = true
@@ -76,7 +77,8 @@ func _physics_process(delta):
 				sprite_2d.flip_h = direction < 0
 				$Ponytail.scale.x = direction
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
+			velocity.x = move_toward(velocity.x, 0, FRICTION)
+			
 			ground_state.travel("idle")
 
 		if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
@@ -97,6 +99,7 @@ func _physics_process(delta):
 		
 		for i in get_slide_collision_count():
 			var collision = get_slide_collision(i)
+			
 			if collision.get_collider().has_meta("interact"):
 				print("interact")
 				var wait_time = collision.get_collider().interact(self)
@@ -106,6 +109,8 @@ func _physics_process(delta):
 					$PauseTimer.start()
 					_pause()
 				break
+			elif collision.get_collider().name == "Damage":
+				take_damage_p(max_health,self)
 				
 		
 		knockback = lerp(knockback,Vector2.ZERO,0.1)

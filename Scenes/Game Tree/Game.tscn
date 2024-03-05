@@ -74,6 +74,10 @@ text = "Shoot"
 layout_mode = 2
 text = "Pound"
 
+[node name="CheckButton5" type="CheckButton" parent="GUI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Wall Jump"
+
 [connection signal="energy_change" from="PlayerManager/Player" to="GUI/MarginContainer/VBoxContainer/Energy" method="_on_player_energy_change"]
 [connection signal="health_change" from="PlayerManager/Player" to="GUI/MarginContainer/VBoxContainer/HP" method="_on_player_health_change"]
 [connection signal="pressed" from="GUI/MarginContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
@@ -82,3 +86,4 @@ text = "Pound"
 [connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton3" to="PlayerManager" method="_on_check_button_3_toggled"]
 [connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton" to="PlayerManager" method="_on_check_button_toggled"]
 [connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton4" to="PlayerManager" method="_on_check_button_4_toggled"]
+[connection signal="toggled" from="GUI/MarginContainer/VBoxContainer/HBoxContainer2/CheckButton5" to="PlayerManager" method="_on_check_button_5_toggled"]

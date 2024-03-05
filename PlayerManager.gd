@@ -68,3 +68,7 @@ func _on_check_button_toggled(toggled_on):
 
 func _on_check_button_4_toggled(toggled_on):
 	set("ability_pound",toggled_on)
+
+
+func _on_check_button_5_toggled(toggled_on):
+	set("ability_wall_jump",toggled_on)
