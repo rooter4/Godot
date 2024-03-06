@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5gqhb72l8h5y"]
+
+[ext_resource type="Texture2D" uid="uid://b053sryla060r" path="res://Assets/Main Characters/Battery/wall_poof.png" id="1_exuls"]
+[ext_resource type="Script" path="res://Scenes/Effects/wall_poof.gd" id="2_fp0ay"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnhux"]
+atlas = ExtResource("1_exuls")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lh70a"]
+atlas = ExtResource("1_exuls")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44wuw"]
+atlas = ExtResource("1_exuls")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypq5f"]
+atlas = ExtResource("1_exuls")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5w6ej"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnhux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lh70a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44wuw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypq5f")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="WallPoof" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_5w6ej")
+autoplay = "default"
+script = ExtResource("2_fp0ay")
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

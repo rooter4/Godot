@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
-const SPEED = 100.0
-const FRICTION = 20
+const SPEED = 15.0
+const MAX_SPEED = 100
+const FRICTION = 7
 const JUMP_VELOCITY = -300.0
 const DOUBLE_JUMP_VELOCITY = -150
 signal health_change
@@ -11,6 +12,7 @@ signal energy_used
 @onready var sprite_2d = $Sprite2D
 const JUMP_POOF = preload("res://Scenes/Effects/JumpPoof.tscn")
 const DOUBLE_POOF = preload("res://Scenes/Effects/DoublePoof.tscn")
+const WALL_POOF = preload("res://Scenes/Effects/wall_poof.tscn")
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var anim_tree = $AnimationTree
 @onready var state = anim_tree.get("parameters/playback")
@@ -35,6 +37,7 @@ var last_floor
 var can_move = true
 var can_wall_jump = false
 var jumping = false
+var wall_jump = false
 
 func _ready():
 	$AnimationTree.active = true
@@ -72,14 +75,17 @@ func _physics_process(delta):
 			if(Input.is_action_just_pressed("ui_text_indent")):
 				handle_dash()
 			elif not dashing:
-				velocity.x = direction * SPEED
+				
+				if velocity.x > -MAX_SPEED and velocity.x < MAX_SPEED:
+					velocity.x += direction * SPEED
 				ground_state.travel("running")
 				sprite_2d.flip_h = direction < 0
 				$Ponytail.scale.x = direction
 		else:
-			velocity.x = move_toward(velocity.x, 0, FRICTION)
-			
 			ground_state.travel("idle")
+		velocity.x = move_toward(velocity.x, 0, FRICTION)
+			
+			
 
 		if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
 			pound()
@@ -91,6 +97,8 @@ func _physics_process(delta):
 		if velocity.y < -980:
 			velocity.y = -980
 		last_floor = is_on_floor()
+		
+	
 		move_and_slide()
 		if !is_on_floor() and last_floor and !jumping:
 			coyote = true
@@ -120,7 +128,7 @@ func _physics_process(delta):
 func handle_jump():
 	var check_double = get_parent().call("ability_check","ability_double")
 	var check_wall= get_parent().call("ability_check","ability_wall_jump")
-	
+	wall_jump = false
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor() or coyote:
 			var jump_poof = JUMP_POOF.instantiate()
@@ -131,7 +139,10 @@ func handle_jump():
 		elif is_on_wall_only() and can_wall_jump and check_wall:
 			velocity.y = JUMP_VELOCITY
 			can_wall_jump = false
-			velocity.x = -get_wall_normal().x * JUMP_VELOCITY
+			velocity.x = -get_wall_normal().x * JUMP_VELOCITY/3
+			var wall_poof = WALL_POOF.instantiate()
+			wall_poof.flip_h = $Sprite2D.flip_h
+			add_child(wall_poof)
 		elif not is_on_floor() and can_double and check_double and not coyote:
 			velocity.y = DOUBLE_JUMP_VELOCITY 
 			can_double = false
@@ -146,6 +157,11 @@ func handle_dash():
 		velocity.x = direction * SPEED *2
 		$DashTimer.start()
 		dashing = true
+		
+		var new = $Sprite2D.material.get_shader_parameter("oldColor")
+		var old =  $Sprite2D.material.get_shader_parameter("blue")
+		$Sprite2D.material.set_shader_parameter("oldColor",old)
+		$Sprite2D.material.set_shader_parameter("blue",new)
 
 func shoot():
 	var check = get_parent().call("ability_check","ability_shoot")

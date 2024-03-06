@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://crrxc8i2tldfx"]
+[gd_scene load_steps=61 format=3 uid="uid://crrxc8i2tldfx"]
 
 [ext_resource type="Texture2D" uid="uid://buje44ctj60xt" path="res://Assets/Main Characters/Battery/run.png" id="1_382qp"]
 [ext_resource type="Script" path="res://Scenes/Camera2D.gd" id="1_lk56t"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cgyuf2qw27xjp" path="res://Assets/Main Characters/Battery/idle.png" id="2_ce86f"]
 [ext_resource type="Texture2D" uid="uid://mcjcon1164ib" path="res://Assets/Other/2d_lights_and_shadows_neutral_point_light.webp" id="2_fn0dv"]
 [ext_resource type="Texture2D" uid="uid://c0uyuuyy4de6" path="res://Assets/Main Characters/Battery/falling.png" id="3_dptbq"]
+[ext_resource type="Shader" path="res://Scenes/new_shader.gdshader" id="4_164g7"]
 [ext_resource type="Texture2D" uid="uid://c3hyqyh3sj53q" path="res://Assets/Main Characters/Battery/slam.png" id="4_kviws"]
 [ext_resource type="Texture2D" uid="uid://dyfvu3axx1emx" path="res://Assets/Main Characters/Battery/double.png" id="6_3di1m"]
 [ext_resource type="Texture2D" uid="uid://bmpgxtbse3ggk" path="res://Assets/Main Characters/Battery/jump.png" id="8_65p5r"]
@@ -13,6 +14,11 @@
 [ext_resource type="Texture2D" uid="uid://bmmhmkay080or" path="res://Assets/Main Characters/Battery/whip.png" id="9_fsyij"]
 [ext_resource type="Script" path="res://Scenes/Attacks/Sword.gd" id="10_qfk5p"]
 [ext_resource type="Texture2D" uid="uid://b4tbq51yqq0d0" path="res://Assets/Main Characters/Battery/wall.png" id="11_ic8ob"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6eo2s"]
+shader = ExtResource("4_164g7")
+shader_parameter/oldColor = Vector4(0.721569, 0, 0, 1)
+shader_parameter/blue = Vector4(0, 0, 1, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pj7jh"]
 size = Vector2(6.00017, 9)
@@ -66,6 +72,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:material")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("ShaderMaterial_6eo2s")]
 }
 
 [sub_resource type="Animation" id="Animation_ht313"]
@@ -230,6 +248,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:material")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("ShaderMaterial_6eo2s")]
 }
 
 [sub_resource type="Animation" id="Animation_87775"]
@@ -575,6 +605,7 @@ size = Vector2(16.2708, 2.66667)
 script = ExtResource("1_r6tt5")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
 position = Vector2(0, 12)
 color = Color(1, 1, 0.603922, 1)
 shadow_enabled = true
@@ -594,6 +625,7 @@ script = ExtResource("1_lk56t")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_6eo2s")
 texture = ExtResource("1_382qp")
 hframes = 7
 
