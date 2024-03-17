@@ -1,7 +1,7 @@
 extends Node2D
 @onready var anim_position = global_position
 
-func _process(delta):
+func _process(_delta):
 	global_position = anim_position
 
 func _on_animated_sprite_2d_animation_finished():

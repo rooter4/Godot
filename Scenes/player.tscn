@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://crrxc8i2tldfx"]
+[gd_scene load_steps=71 format=3 uid="uid://crrxc8i2tldfx"]
 
 [ext_resource type="Texture2D" uid="uid://buje44ctj60xt" path="res://Assets/Main Characters/Battery/run.png" id="1_382qp"]
 [ext_resource type="Script" path="res://Scenes/Camera2D.gd" id="1_lk56t"]
@@ -8,12 +8,14 @@
 [ext_resource type="Texture2D" uid="uid://c0uyuuyy4de6" path="res://Assets/Main Characters/Battery/falling.png" id="3_dptbq"]
 [ext_resource type="Shader" path="res://Scenes/new_shader.gdshader" id="4_164g7"]
 [ext_resource type="Texture2D" uid="uid://c3hyqyh3sj53q" path="res://Assets/Main Characters/Battery/slam.png" id="4_kviws"]
+[ext_resource type="Script" path="res://Scenes/Sprite2D.gd" id="6_2d7mn"]
 [ext_resource type="Texture2D" uid="uid://dyfvu3axx1emx" path="res://Assets/Main Characters/Battery/double.png" id="6_3di1m"]
 [ext_resource type="Texture2D" uid="uid://bmpgxtbse3ggk" path="res://Assets/Main Characters/Battery/jump.png" id="8_65p5r"]
 [ext_resource type="Texture2D" uid="uid://bj35rwlcrnnbb" path="res://Assets/Main Characters/Battery/dash.png" id="8_k4lgs"]
 [ext_resource type="Texture2D" uid="uid://bmmhmkay080or" path="res://Assets/Main Characters/Battery/whip.png" id="9_fsyij"]
 [ext_resource type="Script" path="res://Scenes/Attacks/Sword.gd" id="10_qfk5p"]
 [ext_resource type="Texture2D" uid="uid://b4tbq51yqq0d0" path="res://Assets/Main Characters/Battery/wall.png" id="11_ic8ob"]
+[ext_resource type="Texture2D" uid="uid://w0ml8xscm74i" path="res://Assets/Main Characters/Battery/death.png" id="14_d2and"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6eo2s"]
 shader = ExtResource("4_164g7")
@@ -72,18 +74,6 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Sprite2D:material")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [SubResource("ShaderMaterial_6eo2s")]
 }
 
 [sub_resource type="Animation" id="Animation_ht313"]
@@ -248,18 +238,6 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite2D:material")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [SubResource("ShaderMaterial_6eo2s")]
 }
 
 [sub_resource type="Animation" id="Animation_87775"]
@@ -477,10 +455,50 @@ tracks/3/keys = {
 "values": [false, true]
 }
 
+[sub_resource type="Animation" id="Animation_2wt2x"]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_d2and")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uc18g"]
 _data = {
 "RESET": SubResource("Animation_erpie"),
 "dash": SubResource("Animation_ht313"),
+"death": SubResource("Animation_2wt2x"),
 "double": SubResource("Animation_bvjej"),
 "fall": SubResource("Animation_q5586"),
 "idle": SubResource("Animation_ntao1"),
@@ -535,6 +553,9 @@ graph_offset = Vector2(-126, 77)
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5w2aw"]
 animation = &"dash"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v7gwg"]
+animation = &"death"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_iil41"]
 animation = &"idle"
 
@@ -585,17 +606,35 @@ switch_mode = 2
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t6wvb"]
 switch_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k3sir"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g2uwo"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y8cr2"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ywn8k"]
+
+[sub_resource type="GDScript" id="GDScript_6fbo2"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_shgl3"]
+switch_mode = 2
+advance_mode = 2
+script = SubResource("GDScript_6fbo2")
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_qhudc"]
+states/End/position = Vector2(901, 100)
 states/Start/position = Vector2(155, 100)
 states/air/node = SubResource("AnimationNodeStateMachine_uohux")
-states/air/position = Vector2(507, 100)
+states/air/position = Vector2(502, 100)
 states/dash/node = SubResource("AnimationNodeAnimation_5w2aw")
 states/dash/position = Vector2(413, -8)
+states/death/node = SubResource("AnimationNodeAnimation_v7gwg")
+states/death/position = Vector2(712.832, 100)
 states/ground/node = SubResource("AnimationNodeStateMachine_u4eft")
 states/ground/position = Vector2(317, 100)
 states/whip/node = SubResource("AnimationNodeAnimation_jvmeh")
 states/whip/position = Vector2(425, 196)
-transitions = ["Start", "ground", SubResource("AnimationNodeStateMachineTransition_tc0sw"), "air", "ground", SubResource("AnimationNodeStateMachineTransition_okcca"), "ground", "air", SubResource("AnimationNodeStateMachineTransition_x6pm3"), "ground", "whip", SubResource("AnimationNodeStateMachineTransition_ngcpg"), "whip", "ground", SubResource("AnimationNodeStateMachineTransition_rab0b"), "air", "whip", SubResource("AnimationNodeStateMachineTransition_nfhrn"), "whip", "air", SubResource("AnimationNodeStateMachineTransition_r0c7d"), "ground", "dash", SubResource("AnimationNodeStateMachineTransition_hh741"), "dash", "air", SubResource("AnimationNodeStateMachineTransition_ppo7o"), "air", "dash", SubResource("AnimationNodeStateMachineTransition_srkun"), "dash", "ground", SubResource("AnimationNodeStateMachineTransition_t6wvb")]
+transitions = ["Start", "ground", SubResource("AnimationNodeStateMachineTransition_tc0sw"), "air", "ground", SubResource("AnimationNodeStateMachineTransition_okcca"), "ground", "air", SubResource("AnimationNodeStateMachineTransition_x6pm3"), "ground", "whip", SubResource("AnimationNodeStateMachineTransition_ngcpg"), "whip", "ground", SubResource("AnimationNodeStateMachineTransition_rab0b"), "air", "whip", SubResource("AnimationNodeStateMachineTransition_nfhrn"), "whip", "air", SubResource("AnimationNodeStateMachineTransition_r0c7d"), "ground", "dash", SubResource("AnimationNodeStateMachineTransition_hh741"), "dash", "air", SubResource("AnimationNodeStateMachineTransition_ppo7o"), "air", "dash", SubResource("AnimationNodeStateMachineTransition_srkun"), "dash", "ground", SubResource("AnimationNodeStateMachineTransition_t6wvb"), "ground", "death", SubResource("AnimationNodeStateMachineTransition_k3sir"), "air", "death", SubResource("AnimationNodeStateMachineTransition_g2uwo"), "dash", "death", SubResource("AnimationNodeStateMachineTransition_y8cr2"), "whip", "death", SubResource("AnimationNodeStateMachineTransition_ywn8k"), "death", "End", SubResource("AnimationNodeStateMachineTransition_shgl3")]
 graph_offset = Vector2(-59.1682, -3.01621)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mecwu"]
@@ -628,6 +667,7 @@ texture_filter = 1
 material = SubResource("ShaderMaterial_6eo2s")
 texture = ExtResource("1_382qp")
 hframes = 7
+script = ExtResource("6_2d7mn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1.19209e-07, 11.5)
@@ -647,7 +687,7 @@ tree_root = SubResource("AnimationNodeStateMachine_qhudc")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.411
+wait_time = 0.135
 
 [node name="DashTimer" type="Timer" parent="."]
 wait_time = 0.25
@@ -673,6 +713,7 @@ wait_time = 0.001
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 
+[connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]

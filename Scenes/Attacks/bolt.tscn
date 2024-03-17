@@ -1,48 +1,85 @@
-[gd_scene load_steps=9 format=3 uid="uid://fuuice6evmg0"]
+[gd_scene load_steps=14 format=3 uid="uid://fuuice6evmg0"]
 
 [ext_resource type="Script" path="res://Scenes/Attacks/bolt.gd" id="1_ilt37"]
 [ext_resource type="Texture2D" uid="uid://dwq2uau5luc0w" path="res://Assets/Main Characters/Battery/bolt.png" id="2_v5ebm"]
+[ext_resource type="Texture2D" uid="uid://bdfr30n6i8xnq" path="res://Assets/Main Characters/Battery/splash.png" id="3_wmedg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7x8pp"]
 size = Vector2(7, 13)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fx0s6"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cngwy"]
 atlas = ExtResource("2_v5ebm")
 region = Rect2(0, 0, 8, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_g5p8w"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_g3aoy"]
 atlas = ExtResource("2_v5ebm")
 region = Rect2(8, 0, 8, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wjk1v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hvfu"]
 atlas = ExtResource("2_v5ebm")
 region = Rect2(16, 0, 8, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ybd2a"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jge8b"]
 atlas = ExtResource("2_v5ebm")
 region = Rect2(24, 0, 8, 4)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_cbrfx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_3sx18"]
+atlas = ExtResource("3_wmedg")
+region = Rect2(0, 0, 4, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lk4u5"]
+atlas = ExtResource("3_wmedg")
+region = Rect2(4, 0, 4, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8o6w"]
+atlas = ExtResource("3_wmedg")
+region = Rect2(8, 0, 4, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8uigg"]
+atlas = ExtResource("3_wmedg")
+region = Rect2(12, 0, 4, 4)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7wbql"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fx0s6")
+"texture": SubResource("AtlasTexture_cngwy")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_g5p8w")
+"texture": SubResource("AtlasTexture_g3aoy")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_wjk1v")
+"texture": SubResource("AtlasTexture_7hvfu")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ybd2a")
+"texture": SubResource("AtlasTexture_jge8b")
 }],
 "loop": true,
 "name": &"default",
-"speed": 60.0
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3sx18")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lk4u5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a8o6w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8uigg")
+}],
+"loop": false,
+"name": &"splash",
+"speed": 15.0
 }]
 
 [node name="lightning" type="Area2D"]
+disable_mode = 2
+collision_layer = 5
+collision_mask = 5
 script = ExtResource("1_ilt37")
 
 [node name="BoltCollision" type="CollisionShape2D" parent="."]
@@ -55,8 +92,10 @@ position = Vector2(-0.5, 0.5)
 scale = Vector2(0.95, 0.35)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_cbrfx")
+sprite_frames = SubResource("SpriteFrames_7wbql")
+animation = &"splash"
 autoplay = "default"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cifdfwic1ylf3"]
+[gd_scene load_steps=22 format=3 uid="uid://cifdfwic1ylf3"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/Level00/level_00.gd" id="1_2nodk"]
 [ext_resource type="Texture2D" uid="uid://ded3mva08vsro" path="res://Scenes/Levels/Level00/Purple.png" id="2_nb725"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://27d2tsxg32fb" path="res://Scenes/Levels/Environment/charge.tscn" id="6_fwk01"]
 [ext_resource type="PackedScene" uid="uid://02khsughok0f" path="res://Scenes/Levels/Environment/portal.tscn" id="7_eiamw"]
 [ext_resource type="PackedScene" uid="uid://cj6yiyhuj3xd8" path="res://Scenes/Levels/Environment/Extender.tscn" id="8_m7duw"]
+[ext_resource type="PackedScene" uid="uid://cnnapc0dcheje" path="res://Scenes/Entities/bandana.tscn" id="10_aw3ho"]
+[ext_resource type="PackedScene" uid="uid://skyu8i88wa31" path="res://Scenes/Entities/snake.tscn" id="11_7dmhh"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glx04"]
 blend_mode = 1
@@ -1012,8 +1014,10 @@ texture = ExtResource("3_6gfde")
 
 [sub_resource type="TileSet" id="TileSet_fsv2y"]
 occlusion_layer_0/light_mask = 3
-physics_layer_0/collision_layer = 1
-physics_layer_1/collision_layer = 1
+physics_layer_0/collision_layer = 5
+physics_layer_0/collision_mask = 5
+physics_layer_1/collision_layer = 5
+physics_layer_1/collision_mask = 5
 sources/1 = SubResource("TileSetAtlasSource_g4i2q")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cangv"]
@@ -1073,6 +1077,12 @@ position = Vector2(397, 373)
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
 color = Color(0.309804, 0.32549, 0.329412, 1)
+
+[node name="Bandana" parent="." instance=ExtResource("10_aw3ho")]
+position = Vector2(40, 232)
+
+[node name="Snake" parent="." instance=ExtResource("11_7dmhh")]
+position = Vector2(503, 336)
 
 [connection signal="body_entered" from="Bounds" to="." method="_on_bounds_body_entered"]
 [connection signal="extend_bridge" from="Portal" to="Extender" method="_on_portal_extend_bridge"]

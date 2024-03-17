@@ -79,6 +79,5 @@ func save_new():
 func _on_button_pressed():
 	save_game()
 
-
 func _on_button_2_pressed():
 	load_game()

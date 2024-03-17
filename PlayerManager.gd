@@ -31,6 +31,8 @@ func load(data):
 	print("loading")
 	for key in data:
 		set(key, data[key])
+		if(key == "ability_slash" and data[key] == true):
+			$Player.add_slash()
 func set_abilities(data):
 	print("set abilities")
 	for key in  data:
@@ -47,11 +49,11 @@ func save_new():
 		"ability_wall_jump": false
 		}
 	return save_dict
-
+func add_ability(ability):
+	set(ability, true)
 
 func ability_check(ability):
 	return get(ability)
-
 
 func _on_check_button_2_toggled(toggled_on):
 	print(toggled_on)
@@ -63,7 +65,7 @@ func _on_check_button_3_toggled(toggled_on):
 
 
 func _on_check_button_toggled(toggled_on):
-	set("ablity_shoot", toggled_on)
+	set("ability_shoot", toggled_on)
 
 
 func _on_check_button_4_toggled(toggled_on):

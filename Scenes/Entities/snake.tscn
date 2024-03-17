@@ -1,0 +1,149 @@
+[gd_scene load_steps=20 format=3 uid="uid://skyu8i88wa31"]
+
+[ext_resource type="Texture2D" uid="uid://b8cjg7gu1nfjh" path="res://Assets/Main Characters/Enemys/snake_attack.png" id="1_g74j5"]
+[ext_resource type="Script" path="res://Scenes/Entities/snake.gd" id="1_o8y75"]
+[ext_resource type="Texture2D" uid="uid://b3udbfm14754a" path="res://Assets/Main Characters/Enemys/snake.png" id="2_e02yy"]
+[ext_resource type="Texture2D" uid="uid://bjfibml68wijj" path="res://Assets/Main Characters/Enemys/snkae_jump.png" id="3_1ii5u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0u0fs"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o26sh"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_urc7r"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5s5nt"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_af1js"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vocn8"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_87ktm"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abu86"]
+atlas = ExtResource("1_g74j5")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6s7u3"]
+atlas = ExtResource("2_e02yy")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v5a8b"]
+atlas = ExtResource("2_e02yy")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jw4f"]
+atlas = ExtResource("3_1ii5u")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kr3s6"]
+atlas = ExtResource("3_1ii5u")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_28eni"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0u0fs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o26sh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_urc7r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s5nt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_af1js")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vocn8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_87ktm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abu86")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6s7u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v5a8b")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jw4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kr3s6")
+}],
+"loop": false,
+"name": &"jump",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_15i80"]
+size = Vector2(7.5, 10.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ip1fy"]
+size = Vector2(15, 7)
+
+[node name="Snake" type="StaticBody2D"]
+script = ExtResource("1_o8y75")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_28eni")
+animation = &"jump"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.75, -5.25)
+shape = SubResource("RectangleShape2D_15i80")
+
+[node name="Front" type="RayCast2D" parent="."]
+position = Vector2(-1, -5)
+target_position = Vector2(-19, 0)
+
+[node name="Rear" type="RayCast2D" parent="."]
+position = Vector2(-1, -5)
+target_position = Vector2(60, 0)
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="DamageShape" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-7, -4)
+shape = SubResource("RectangleShape2D_ip1fy")
+disabled = true
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

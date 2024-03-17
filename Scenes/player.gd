@@ -47,84 +47,78 @@ func _ready():
 	
 
 func _physics_process(delta):
-	
-	if(can_move):
-		if is_on_floor():
-			state.travel("ground")
-			can_dash = true
-			jumping = false
-			coyote = false
-			can_wall_jump = true
-		else:
-			state.travel("air")
-			
-		if is_on_wall_only():
-			air_state.travel("wall")
-			
-		handle_jump()
-		
-		if dashing:
-			velocity.y = 0
-		else:
-			velocity.y += gravity * delta
-		
-		#Left/Right and Dash input
-		direction = Input.get_axis("ui_left", "ui_right")
-		if direction:
-			ground_state.travel("running")
-			if(Input.is_action_just_pressed("ui_text_indent")):
-				handle_dash()
-			elif not dashing:
-				
-				if velocity.x > -MAX_SPEED and velocity.x < MAX_SPEED:
-					velocity.x += direction * SPEED
-				ground_state.travel("running")
-				sprite_2d.flip_h = direction < 0
-				$Ponytail.scale.x = direction
-		else:
-			ground_state.travel("idle")
-		velocity.x = move_toward(velocity.x, 0, FRICTION)
-			
-			
-
-		if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
-			pound()
-		if Input.is_action_just_pressed("ui_page_down"):
-			shoot()
-		if(Input.is_action_pressed("ui_end")):
-			state.travel("whip")
-
-		if velocity.y < -980:
-			velocity.y = -980
-		last_floor = is_on_floor()
-		
-	
-		move_and_slide()
-		if !is_on_floor() and last_floor and !jumping:
-			coyote = true
-			print("Coyote!!")
-			$CoyoteTimer.start()
-		
-		for i in get_slide_collision_count():
-			var collision = get_slide_collision(i)
-			
-			if collision.get_collider().has_meta("interact"):
-				print("interact")
-				var wait_time = collision.get_collider().interact(self)
-				if(wait_time > 0.0):
-					$PauseTimer.wait_time = wait_time
-					print(wait_time)
-					$PauseTimer.start()
-					_pause()
-				break
-			elif collision.get_collider().name == "Damage":
-				take_damage_p(max_health,self)
-				
-		
-		knockback = lerp(knockback,Vector2.ZERO,0.1)
+	if is_on_floor():
+		state.travel("ground")
+		can_dash = true
+		jumping = false
+		coyote = false
+		can_wall_jump = true
 	else:
-		$Sprite2D.visible = false
+		state.travel("air")
 		
+	if is_on_wall_only():
+		air_state.travel("wall")
+		
+	handle_jump()
+	
+	if dashing:
+		velocity.y = 0
+	else:
+		velocity.y += gravity * delta
+	
+	#Left/Right and Dash input
+	direction = Input.get_axis("ui_left", "ui_right")
+	if direction:
+		ground_state.travel("running")
+		if(Input.is_action_just_pressed("ui_text_indent")):
+			handle_dash()
+		elif not dashing:
+			
+			if velocity.x > -MAX_SPEED and velocity.x < MAX_SPEED:
+				velocity.x += direction * SPEED
+			ground_state.travel("running")
+			sprite_2d.flip_h = direction < 0
+			$Ponytail.scale.x = direction
+	else:
+		ground_state.travel("idle")
+	velocity.x = move_toward(velocity.x, 0, FRICTION)
+		
+		
+
+	if Input.is_action_just_pressed("ui_page_up") && is_on_floor():
+		pound()
+	if Input.is_action_just_pressed("ui_page_down"):
+		shoot()
+	if(Input.is_action_pressed("ui_end")):
+		whip()
+		
+
+	if velocity.y < -980:
+		velocity.y = -980
+	last_floor = is_on_floor()
+	
+
+	move_and_slide()
+	if !is_on_floor() and last_floor and !jumping:
+		coyote = true
+		$CoyoteTimer.start()
+	
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		
+		if collision.get_collider().has_meta("interact"):
+			var wait_time = collision.get_collider().interact(self)
+			if(wait_time > 0.0):
+				$PauseTimer.wait_time = wait_time
+				$PauseTimer.start()
+				_pause()
+			break
+		elif collision.get_collider().name == "Damage":
+			take_damage_p(max_health,self)
+			
+	
+	knockback = lerp(knockback,Vector2.ZERO,0.1)
+
 func handle_jump():
 	var check_double = get_parent().call("ability_check","ability_double")
 	var check_wall= get_parent().call("ability_check","ability_wall_jump")
@@ -154,24 +148,21 @@ func handle_dash():
 	if can_dash and check:
 		state.travel("dash")
 		can_dash = false
-		velocity.x = direction * SPEED *2
+		velocity.x = direction * SPEED *20
 		$DashTimer.start()
 		dashing = true
 		
-		var new = $Sprite2D.material.get_shader_parameter("oldColor")
-		var old =  $Sprite2D.material.get_shader_parameter("blue")
-		$Sprite2D.material.set_shader_parameter("oldColor",old)
-		$Sprite2D.material.set_shader_parameter("blue",new)
+		
 
 func shoot():
 	var check = get_parent().call("ability_check","ability_shoot")
 	if(can_shoot and check):
+		
 		const BOLT = preload("res://Scenes/Attacks/bolt.tscn")
 		var new_bolt = BOLT.instantiate()
 		get_parent().add_child(new_bolt)
 		new_bolt.transform = global_transform
-		new_bolt.global_position.y +=9
-		new_bolt.global_position.x +=5
+		new_bolt.global_position.y +=10
 		new_bolt.flip(sprite_2d.flip_h)
 		
 		can_shoot=false
@@ -188,7 +179,10 @@ func pound():
 		can_pound = false
 		$ShakeCam.add_trauma(.5)
 		$CooldownTimer.start()
-
+func whip():
+	var check = get_parent().call("ability_check","ability_slash")
+	if(check):
+		state.travel("whip")
 func _on_timer_timeout():
 	can_shoot = true
 
@@ -209,7 +203,7 @@ func take_damage_p(amount, body):
 			var dir = global_position.direction_to(body.global_position)
 			dir = dir.normalized().snapped(Vector2.ONE)
 
-			var exp_force = dir *800
+			var exp_force = dir *200
 
 			velocity.x = exp_force.x *-1
 			velocity.y = exp_force.y /2 * -1
@@ -218,16 +212,18 @@ func take_damage_p(amount, body):
 			tween.tween_property($Sprite2D, "modulate",Color.WHITE,0.1)
 			move_and_slide()
 		else:
-			get_tree().reload_current_scene()
+			state.travel("death")
+			set_physics_process(false)
+			
 
 func _on_damage_cooldown_timeout():
 	can_take_damage = true
 func _pause():
-	can_move = false
-	$Sprite2D.visible = false
+	set_physics_process(false)
+	hide()
 func _on_pause_timer_timeout():
-	can_move = true
-	$Sprite2D.visible = true
+	set_physics_process(true)
+	show()
 func change_energy(number):
 	energy += number
 	if energy > max_energy:
@@ -239,4 +235,11 @@ func change_energy(number):
 func _on_coyote_timer_timeout():
 	coyote = false
 
-	
+func _on_animation_tree_animation_finished(anim_name):
+	if anim_name == "death":
+		get_tree().reload_current_scene()
+func add_ability(ability):
+	get_parent().add_ability(ability)
+	add_slash()
+func add_slash():
+	$Sprite2D.add_slash()
